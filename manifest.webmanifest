@@ -1,6 +1,6 @@
 {
   "name": "Eyeshadow Diary",
-  "short_name": "Eyeshadow Diary",
+  "short_name": "Eyeshadow",
   "description": "My personal eyeshadow collection and makeup journal",
   "start_url": "./",
   "scope": "./",
