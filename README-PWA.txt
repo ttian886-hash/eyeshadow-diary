@@ -1,1 +1,8 @@
-Eyeshadow Diary PWA v3: fixes Frequently Used (Top 12), full-width colour artwork, and network-first updates. Upload CONTENTS of this folder to repository root, replacing existing files. Keep local data backed up.
+Eyeshadow Diary PWA v8
+
+Changes:
+- Leaving a product detail page clears temporary shade checkmarks.
+- Legacy history supports Edit Notes and Delete Record without modifying usage totals.
+- Modern history records still support Edit Look and Delete Look with count adjustments.
+
+Before updating, export a full backup. Upload the contents of this folder to the root of the existing GitHub repository. Do not clear app data.
