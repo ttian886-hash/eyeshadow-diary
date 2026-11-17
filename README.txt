@@ -1,0 +1,1 @@
+Batch 24: owner-photo corrections for Clé de Peau quad, Sisley Ombre Éclat Liquide 5 Bronze, Chantecaille Elephant and Rhinoceros shade descriptions, and Chanel Les Beiges Medium original 2017 five-pan layout. Existing usage data preserved. Open index.html. Browser local storage can override older versions; back up first.
