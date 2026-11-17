@@ -1,0 +1,759 @@
+{
+  "summary": {
+    "total": 76,
+    "source_reviewed": 71,
+    "identity_only": 1,
+    "unverified": 4
+  },
+  "note": "Batch 22: Peri-twinkle shade and finish source-reviewed; Clé de peau 303 identity verified only. Previously reviewed items vary in depth; not full colour/layout verification.",
+  "products": [
+    {
+      "brand": "Chantecaille",
+      "name": "Elephant",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (approximate colours)",
+      "source_key": "Chantecaille|Elephant",
+      "source_url": "https://chantecaille.com/products/luminescent-eye-shades",
+      "shade_description": "Shimmering taupe grey"
+    },
+    {
+      "brand": "Chantecaille",
+      "name": "Rhinoceros",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (approximate colours)",
+      "source_key": "Chantecaille|Rhinoceros",
+      "source_url": "https://chantecaille.com/products/luminescent-eye-shades",
+      "shade_description": "Sophisticated olive"
+    },
+    {
+      "brand": "Hourglass",
+      "name": "Smoke",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (approximate colours)",
+      "source_key": "Hourglass|Smoke"
+    },
+    {
+      "brand": "Urban Decay",
+      "name": "Space Cowboy",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (approximate colours)",
+      "source_key": "Urban Decay|Space Cowboy"
+    },
+    {
+      "brand": "Urban Decay",
+      "name": "Diamond Dog",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (approximate colours)",
+      "source_key": "Urban Decay|Diamond Dog"
+    },
+    {
+      "brand": "Urban Decay",
+      "name": "Rockstar",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (approximate colours)",
+      "source_key": "Urban Decay|Rockstar",
+      "source_url": "https://www.temptalia.com/product/urban-decay-eyeshadow-discontinued/rockstar/",
+      "shade_description": "Deep purple, shimmery discontinued original"
+    },
+    {
+      "brand": "Mac",
+      "name": "Satin Taupe",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (approximate colours)",
+      "source_key": "Mac|Satin Taupe"
+    },
+    {
+      "brand": "Mac",
+      "name": "Omega",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (approximate colours)",
+      "source_key": "Mac|Omega"
+    },
+    {
+      "brand": "Mac",
+      "name": "Orb",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (approximate colours)",
+      "source_key": "Mac|Orb",
+      "source_url": "https://www.maccosmetics.com/products/small-eye-shadow?pr_rd_page=12&shade=Orb",
+      "shade_description": "Soft peachy-beige, satin finish"
+    },
+    {
+      "brand": "By Terry",
+      "name": "Misty Rock",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (approximate colours)",
+      "source_key": "By Terry|Misty Rock",
+      "source_url": "https://eu.byterry.com/products/ombre-blackstar-eyeshadow",
+      "shade_description": "No. 5; shimmering bronzed taupe with violet undertone"
+    },
+    {
+      "brand": "Lethal",
+      "name": "Venom",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (shade description confirmed; HEX approximate; layout may be unverified)",
+      "source_key": "Lethal|Venom"
+    },
+    {
+      "brand": "Lethal",
+      "name": "Lithium",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (manufacturer shade description; approximate HEX)",
+      "source_key": null,
+      "source_url": "https://lethalcosmetics.com/products/lithium",
+      "verification_note": "Batch 18: Metallic taupe"
+    },
+    {
+      "brand": "Lethal",
+      "name": "Descent",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (shade description confirmed; HEX approximate; layout may be unverified)",
+      "source_key": "Lethal|Descent"
+    },
+    {
+      "brand": "Lethal",
+      "name": "Synth",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (shade description confirmed; HEX approximate; layout may be unverified)",
+      "source_key": "Lethal|Synth"
+    },
+    {
+      "brand": "Lethal",
+      "name": "Astral",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (shade description confirmed; HEX approximate; layout may be unverified)",
+      "source_key": "Lethal|Astral"
+    },
+    {
+      "brand": "Lethal",
+      "name": "Incarnate",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (shade description confirmed; HEX approximate; layout may be unverified)",
+      "source_key": "Lethal|Incarnate"
+    },
+    {
+      "brand": "Lethal",
+      "name": "Evoke",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (shade description confirmed; HEX approximate; layout may be unverified)",
+      "source_key": "Lethal|Evoke"
+    },
+    {
+      "brand": "Glaminatrix",
+      "name": "Sundown",
+      "type": "single",
+      "shades": 1,
+      "status": "not yet source-verified",
+      "source_key": null
+    },
+    {
+      "brand": "Glaminatrix",
+      "name": "Euphoria",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (official shade description; approximate colour)",
+      "source_key": null,
+      "source_url": "https://glaminatrixcosmetics.com.au/products/26mm-multichrome-eyeshadow-pan-euphoria",
+      "shade_description": "Pink / gold / green sparkle multichrome",
+      "verification_note": "Batch 21: official colour and finish; HEX only approximates the base, not reflect shifts."
+    },
+    {
+      "brand": "Glaminatrix",
+      "name": "Peri-twinkle",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (approximate colours)",
+      "source_key": null,
+      "source_url": "https://www.temptalia.com/product/glaminatrix-foiled-eyeshadow/peri-twinkle/",
+      "shade_description": "Cool light lavender with silvery-gold shimmer"
+    },
+    {
+      "brand": "Glaminatrix",
+      "name": "Peacock",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (official shade description; approximate colour)",
+      "source_key": null,
+      "source_url": "https://glaminatrixcosmetics.com.au/products/26mm-foiled-eyeshadow-pan-peacock",
+      "shade_description": "Berry brown with green reflects; foiled finish",
+      "verification_note": "Batch 21: official colour and finish; HEX only approximates the base, not reflect shifts."
+    },
+    {
+      "brand": "Glaminatrix",
+      "name": "Bonnet",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (official shade description; approximate colour)",
+      "source_key": null,
+      "source_url": "https://glaminatrixcosmetics.com.au/collections/top-sellers/products/26mm-duochrome-eyeshadow-pan-bonnet",
+      "shade_description": "Lavender with gold shift; duochrome finish",
+      "verification_note": "Batch 21: official colour and finish; HEX only approximates the base, not reflect shifts."
+    },
+    {
+      "brand": "Lisa Eldridge",
+      "name": "Bianca",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (HEX approximate; see source for verification scope)",
+      "source_key": "Lisa Eldridge|Bianca",
+      "source_url": "https://milled.com/lisaeldridge.com/your-favourite-shades-are-back-oqnLZ9qoJWxABiLZ",
+      "shade_description": "Manufacturer or published source checked; not a measured colour. Exact pan positions verified only for Exaggereyes."
+    },
+    {
+      "brand": "Lisa Eldridge",
+      "name": "Iris",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (manufacturer shade description; approximate HEX)",
+      "source_key": "https://www.lisaeldridge.com/blogs/videos/new-shades-are-here",
+      "source_url": "https://us.lisaeldridge.com/blogs/articles/best-eyeshadows-for-green-eyes",
+      "verification_note": "Batch 18: Smoky amethyst with violet and fuchsia pearls; Liquid Lurex"
+    },
+    {
+      "brand": "Lisa Eldridge",
+      "name": "Liza",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (manufacturer shade description; approximate HEX)",
+      "source_key": "https://www.lisaeldridge.com/blogs/videos/new-shades-are-here",
+      "source_url": "https://us.lisaeldridge.com/products/liza-liquid-lurex-eyeshadow?variant=47125326266671",
+      "verification_note": "Batch 18: Charcoal with multicolour pearls; Liquid Lurex"
+    },
+    {
+      "brand": "Lisa Eldridge",
+      "name": "Zora",
+      "type": "single",
+      "shades": 1,
+      "status": "source-reviewed (HEX approximate; see source for verification scope)",
+      "source_key": "Lisa Eldridge|Zora",
+      "source_url": "https://milled.com/lisaeldridge.com/your-favourite-shades-are-back-oqnLZ9qoJWxABiLZ",
+      "shade_description": "Manufacturer or published source checked; not a measured colour. Exact pan positions verified only for Exaggereyes."
+    },
+    {
+      "brand": "Sisley",
+      "name": "Bronze",
+      "type": "single",
+      "shades": 1,
+      "status": "not yet source-verified",
+      "source_key": null,
+      "note": "Variant ambiguity: need product line or shade number before colour can be verified."
+    },
+    {
+      "brand": "Nars",
+      "name": "Cordura",
+      "type": "palette",
+      "shades": 2,
+      "status": "source-reviewed (approximate colours)",
+      "source_key": "Nars|Cordura",
+      "source_url": "https://www.narscosmetics.ie/en/duo-eyeshadow/999NAC0000075.html",
+      "shade_description": "Two pans: shimmering rich walnut / shimmering black-brown"
+    },
+    {
+      "brand": "Nars",
+      "name": "Kalahari",
+      "type": "palette",
+      "shades": 2,
+      "status": "source-reviewed (approximate colours)",
+      "source_key": "Nars|Kalahari",
+      "source_url": "https://www.narscosmetics.ie/en/duo-eyeshadow/999NAC0000075.html",
+      "shade_description": "Two pans: shimmering taupe plum / shimmering rosy bronze"
+    },
+    {
+      "brand": "Chantecaille",
+      "name": "Tibet",
+      "type": "palette",
+      "shades": 2,
+      "status": "source-reviewed (shade identities; physical position/HEX not exact)",
+      "source_key": null,
+      "source_url": "https://www.diarydirectory.com/newsarticle/chantecaille-beaute-to-launch-the-himalayan-collection/1041",
+      "shade_description": "2015 launch listing: Lhasa warm slate grey, Himalaya platinum shimmer. A separate Temptalia listing uses Pigeon and Marble; naming/version discrepancy unresolved. Two horizontal pans; exact position unconfirmed."
+    },
+    {
+      "brand": "Tom Ford",
+      "name": "Cocoa Mirage",
+      "type": "palette",
+      "shades": 4,
+      "status": "source-reviewed (approximate colours)",
+      "source_key": "Tom Ford|Cocoa Mirage"
+    },
+    {
+      "brand": "Tom Ford",
+      "name": "Titanium Smoke",
+      "type": "palette",
+      "shades": 4,
+      "status": "source-reviewed (physical position; HEX approximate)",
+      "source_key": "Tom Ford|Titanium Smoke",
+      "source_url": "https://www.getlippie.com/2012/01/tom-ford-titanium-smoke-eyeshadow-quad.html",
+      "shade_description": "2×2. Top left champagne glitter, top right satin grey, bottom left matte dark charcoal, bottom right sparkling charcoal. Review gives clockwise sequence; colours approximate."
+    },
+    {
+      "brand": "Clé de peau",
+      "name": "303",
+      "type": "palette",
+      "shades": 4,
+      "status": "identity-only (pan colours/order unverified)",
+      "source_key": null,
+      "source_url": "https://www.lookfantastic.com/p/cle-de-peau-beaute-eye-colour-quad-various-options/13316827/",
+      "shade_description": "303 Baby Universe; 4-pan quad"
+    },
+    {
+      "brand": "Charlotte Tilbury",
+      "name": "The Dolce Vita",
+      "type": "palette",
+      "shades": 4,
+      "status": "source-reviewed (HEX approximate; see source for verification scope)",
+      "source_key": "Charlotte Tilbury|The Dolce Vita",
+      "source_url": "https://makeup-sessions.com/beauty/charlotte-tilbury-dolce-vita-palette-review-and-swatches/",
+      "shade_description": "Manufacturer or published source checked; not a measured colour. Exact pan positions verified only for Exaggereyes."
+    },
+    {
+      "brand": "Charlotte Tilbury",
+      "name": "Exaggereyes",
+      "type": "palette",
+      "shades": 4,
+      "status": "source-reviewed (HEX approximate; see source for verification scope)",
+      "source_key": "Charlotte Tilbury|Exaggereyes",
+      "source_url": "https://www.charlottetilbury.com/eu/secrets/apply-new-exagger-eyes-palette",
+      "shade_description": "Manufacturer or published source checked; not a measured colour. Exact pan positions verified only for Exaggereyes."
+    },
+    {
+      "brand": "Charlotte Tilbury",
+      "name": "Green Lights",
+      "type": "palette",
+      "shades": 4,
+      "status": "source-reviewed (partial; approximated colour; layout not fully confirmed)",
+      "source_key": "Charlotte Tilbury|Green Lights",
+      "source_url": "https://www.charlottetilbury.com/de/product/luxury-palette-green-lights",
+      "shade_description": "Manufacturer verified 4 shades and colour descriptions; display colours approximate."
+    },
+    {
+      "brand": "Chanel",
+      "name": "226 Tisse Rivoli",
+      "type": "palette",
+      "shades": 4,
+      "status": "source-reviewed (shade family confirmed; HEX and physical positions approximate)",
+      "source_key": "Chanel|226 Tisse Rivoli",
+      "source_url": "https://www.chanel.com/cn/makeup/p/164308/les-4-ombres-multi-effect-quadra-eyeshadow/",
+      "shade_description": "Manufacturer or retailer shade descriptions confirmed; exact physical pan positions not independently confirmed."
+    },
+    {
+      "brand": "Chanel",
+      "name": "268 Candeur Et Experience",
+      "type": "palette",
+      "shades": 4,
+      "status": "source-reviewed (shade family confirmed; HEX and physical positions approximate)",
+      "source_key": "Chanel|268 Candeur Et Experience",
+      "source_url": "https://www.chanel.com/cn/makeup/p/164308/les-4-ombres-multi-effect-quadra-eyeshadow/",
+      "shade_description": "Manufacturer or retailer shade descriptions confirmed; exact physical pan positions not independently confirmed."
+    },
+    {
+      "brand": "Chanel",
+      "name": "308 Clair-Obscur",
+      "type": "palette",
+      "shades": 4,
+      "status": "source-reviewed (shade family confirmed; HEX and physical positions approximate)",
+      "source_key": "Chanel|308 Clair-Obscur",
+      "source_url": "https://www.chanel.com/cn/makeup/p/164308/les-4-ombres-multi-effect-quadra-eyeshadow/",
+      "shade_description": "Manufacturer or retailer shade descriptions confirmed; exact physical pan positions not independently confirmed."
+    },
+    {
+      "brand": "Viseart",
+      "name": "Praline",
+      "type": "palette",
+      "shades": 4,
+      "status": "source-reviewed (shade names and descriptions; approximate colours; layout unverified)",
+      "source_key": null,
+      "source_url": "https://www.lookfantastic.de/p/viseart-paris-petits-fours-praline/12743404/",
+      "verification_note": "Batch 17: corrected names and colours; pan positions unverified."
+    },
+    {
+      "brand": "Viseart",
+      "name": "Lilas",
+      "type": "palette",
+      "shades": 4,
+      "status": "source-reviewed (shade order and approximate colours)",
+      "source_key": "Viseart|Lilas",
+      "source_url": "https://viseartparis.com/en-de/collections/sale/products/petits-fours-lilas"
+    },
+    {
+      "brand": "Surratt",
+      "name": "Beyond Beige",
+      "type": "palette",
+      "shades": 4,
+      "status": "source-reviewed (shade description confirmed; HEX approximate; layout may be unverified)",
+      "source_key": "Surratt|Beyond Beige"
+    },
+    {
+      "brand": "YSL",
+      "name": "100 Stora Dolls",
+      "type": "palette",
+      "shades": 4,
+      "status": "source-reviewed (partial; colour HEX approximate or unverified)",
+      "source_key": "YSL|100 Stora Dolls",
+      "source_url": "https://www.yslbeautyus.com/makeup/eye/eyeshadow/couture-mini-clutch-luxury-eyeshadow-palette/3614273921688.html"
+    },
+    {
+      "brand": "Dior",
+      "name": "669 Soft Cashmere",
+      "type": "palette",
+      "shades": 5,
+      "status": "source-reviewed (approximate colours; layout limitations)",
+      "source_key": "Dior|669 Soft Cashmere",
+      "source_url": "https://www.the-beauty-traveler.com/dior-soft-cashmere-669-eyeshadow-palette/",
+      "shade_description": "Five shades; layout is nonrectangular and app representation approximate"
+    },
+    {
+      "brand": "Chanel",
+      "name": "Medium",
+      "type": "palette",
+      "shades": 5,
+      "status": "not yet source-verified",
+      "source_key": null
+    },
+    {
+      "brand": "Natasha Denona",
+      "name": "Palette 02",
+      "type": "palette",
+      "shades": 5,
+      "status": "source-reviewed (approximate colours; layout limitations)",
+      "source_key": "Natasha Denona|Palette 02",
+      "source_url": "https://www.beautylish.com/p/natasha-denona-eyeshadow-palette-5",
+      "shade_description": "Five named shades; colours approximate"
+    },
+    {
+      "brand": "Natasha Denona",
+      "name": "Camel",
+      "type": "palette",
+      "shades": 5,
+      "status": "source-reviewed (approximate colours; layout limitations)",
+      "source_key": "Natasha Denona|Camel",
+      "source_url": "https://sephora.in/product/natasha-denona-camel-eyeshadow-palette-v-default",
+      "shade_description": "Five named shades, one row; colours approximate"
+    },
+    {
+      "brand": "Natasha Denona",
+      "name": "Mini Glam",
+      "type": "palette",
+      "shades": 5,
+      "status": "source-reviewed (approximate colours)",
+      "source_key": "Natasha Denona|Mini Glam"
+    },
+    {
+      "brand": "Natasha Denona",
+      "name": "Mini Retro",
+      "type": "palette",
+      "shades": 5,
+      "status": "source-reviewed (shade family confirmed; HEX and physical positions approximate)",
+      "source_key": "Natasha Denona|Mini Retro",
+      "source_url": "https://www.beautylish.com/s/natasha-denona-mini-retro-palette",
+      "shade_description": "Manufacturer or retailer shade descriptions confirmed; exact physical pan positions not independently confirmed."
+    },
+    {
+      "brand": "Natasha Denona",
+      "name": "Mini Love",
+      "type": "palette",
+      "shades": 5,
+      "status": "source-reviewed (shade family confirmed; HEX and physical positions approximate)",
+      "source_key": "Natasha Denona|Mini Love",
+      "source_url": "https://www.beautylish.com/p/natasha-denona-mini-love-palette",
+      "shade_description": "Manufacturer or retailer shade descriptions confirmed; exact physical pan positions not independently confirmed."
+    },
+    {
+      "brand": "Wayne Goss",
+      "name": "Imperial Topaz",
+      "type": "palette",
+      "shades": 6,
+      "status": "source-reviewed (physical position; HEX approximate)",
+      "source_key": "Wayne Goss|Imperial Topaz",
+      "source_url": "https://www.beautylish.com/s/wayne-goss-the-luxury-eye-palette-imperial-topaz",
+      "shade_description": "2×3. Official retailer shade positions: champagne satin, soft bronze satin, matte black / copper rose satin, warm brown matte, sparkling champagne. HEX approximate."
+    },
+    {
+      "brand": "Wayne Goss",
+      "name": "Smoky Quartz",
+      "type": "palette",
+      "shades": 6,
+      "status": "source-reviewed (physical position; HEX approximate)",
+      "source_key": "Wayne Goss|Smoky Quartz",
+      "source_url": "https://beautyvelle.com/2022/06/20/wayne-goss-smoky-quartz-luxury-eye-collection/",
+      "shade_description": "2×3. Top cream matte, neutral taupe matte, deep grey-brown satin / bottom warm brown matte, burgundy matte, warm taupe shimmer. HEX approximate."
+    },
+    {
+      "brand": "Bare Minerals",
+      "name": "Neutral",
+      "type": "palette",
+      "shades": [
+        {
+          "name": "Mystic",
+          "colour": "#dfd3c4"
+        },
+        {
+          "name": "Sandstone",
+          "colour": "#c69b89"
+        },
+        {
+          "name": "Believer",
+          "colour": "#b47e65"
+        },
+        {
+          "name": "Tribe",
+          "colour": "#a86c50"
+        },
+        {
+          "name": "Native",
+          "colour": "#806c5d"
+        },
+        {
+          "name": "Indie",
+          "colour": "#4f3a33"
+        }
+      ],
+      "status": "not yet source-verified",
+      "source_key": null,
+      "source": "https://www.lolassecretbeautyblog.com/2019/01/bareminerals-gen-nude-neutral-eyeshadow.html",
+      "note": "Six shade identities and finish verified; display colours approximate; physical positions not confirmed",
+      "layoutColumns": 3
+    },
+    {
+      "brand": "Kevyn Aucoin",
+      "name": "Unblinking",
+      "type": "palette",
+      "shades": 6,
+      "status": "source-reviewed (five powder pans + separate cream foil; HEX approximate)",
+      "source_key": null,
+      "source_url": "https://eu.lookfantastic.com/p/kevyn-aucoin-emphasize-eye-design-palette-unblinking/11994707/",
+      "shade_order": [
+        "Lace",
+        "Nude",
+        "Gilded",
+        "Olive",
+        "Espresso",
+        "24K Gold (separate cream foil)"
+      ],
+      "notes": "The sixth colour is not a sixth powder pan."
+    },
+    {
+      "brand": "Nabla",
+      "name": "Platinum",
+      "type": "palette",
+      "shades": 6,
+      "status": "source-reviewed (shade identities; physical position/HEX not exact)",
+      "source_key": null,
+      "source_url": "https://www.parfuemerie-becker.de/nabla/makeup/eyes/cutie-palette-lidschatten-palette/",
+      "shade_description": "Six shades confirmed by retailer and review: graphite taupe, gunmetal khaki, rosy taupe, antique brass, silver foil, dark walnut. 2×3 format; exact pan order not independently established."
+    },
+    {
+      "brand": "Melt",
+      "name": "She’s in parties",
+      "type": "palette",
+      "shades": 8,
+      "status": "source-reviewed (limited scope; HEX approximate or unverified)",
+      "source_key": "https://www.beautybay.com/p/melt-cosmetics/shes-in-parties-palette/shes-in-parties-palette/"
+    },
+    {
+      "brand": "Nars",
+      "name": "Climax",
+      "type": "palette",
+      "shades": 9,
+      "status": "source-reviewed (shade order and approximate colours)",
+      "source_key": "Nars|Climax",
+      "source_url": "https://www.lookfantastic.com/p/nars-climax-eyeshadow-palette/13166507/"
+    },
+    {
+      "brand": "Dior",
+      "name": "Cool Neutrals",
+      "type": "palette",
+      "shades": 9,
+      "status": "source-reviewed (approximate colours)",
+      "source_key": "Dior|Cool Neutrals"
+    },
+    {
+      "brand": "Pat McGrath Labs",
+      "name": "Subliminal",
+      "type": "palette",
+      "shades": 10,
+      "status": "source-reviewed (HEX approximate; see source for verification scope)",
+      "source_key": "Pat McGrath Labs|Subliminal",
+      "source_url": "https://www.patmcgrath.com/products/mothership-i-subliminal",
+      "shade_description": "Product shade identities reviewed; exact physical pan order not independently verified."
+    },
+    {
+      "brand": "Pat McGrath Labs",
+      "name": "Midnight Sun",
+      "type": "palette",
+      "shades": 10,
+      "status": "source-reviewed (row order and names; HEX approximate)",
+      "source_key": "Pat McGrath Labs|Midnight Sun",
+      "source_url": "https://potpourriofwhatever.com/pat-mcgrath-mothership-vi-midnight-sun-palette/",
+      "shade_description": "Independent review identifies physical order top row and bottom row, five each; HEX estimated from descriptions, not measured."
+    },
+    {
+      "brand": "Viseart",
+      "name": "Neutral Matte",
+      "type": "palette",
+      "shades": 12,
+      "status": "source-reviewed (HEX approximate; see source for verification scope)",
+      "source_key": "Viseart|Neutral Matte",
+      "source_url": "https://viseartparis.com/en-de/products/visepro%E2%84%A2-neutral-mattes",
+      "shade_description": "Product shade identities reviewed; exact physical pan order not independently verified."
+    },
+    {
+      "brand": "Viseart",
+      "name": "Violette Etendu",
+      "type": "palette",
+      "shades": 12,
+      "status": "source-reviewed (partial; colour HEX approximate or unverified)",
+      "source_key": "Viseart|Violette Etendu",
+      "source_url": "https://kultkosmetik.de/Viseart-Violette-Etendu-12-Farben/VS-442702"
+    },
+    {
+      "brand": "Viseart",
+      "name": "Paris Edit",
+      "type": "palette",
+      "shades": 12,
+      "status": "source-reviewed (partial; approximated colour; layout not fully confirmed)",
+      "source_key": "Viseart|Paris Edit",
+      "source_url": "https://visearteurope.com/products/12-color-eyeshadow-paris-edit-ved04",
+      "shade_description": "12 pans and general colour story verified; individual tones/positions not verified."
+    },
+    {
+      "brand": "Viseart",
+      "name": "Dark Edit",
+      "type": "palette",
+      "shades": 12,
+      "status": "source-reviewed (partial; approximated colour; layout not fully confirmed)",
+      "source_key": "Viseart|Dark Edit",
+      "source_url": "https://viseartparis.com/en-de/products/dark-edit",
+      "shade_description": "12 pans and general colour story verified; most individual tones/positions not verified."
+    },
+    {
+      "brand": "Charlotte Tilbury",
+      "name": "Star in your eyes",
+      "type": "palette",
+      "shades": 12,
+      "status": "source-reviewed (partial; colour HEX approximate or unverified)",
+      "source_key": "Charlotte Tilbury|Star in your eyes",
+      "source_url": "https://glamorable.com/charlotte-tilbury-stars-in-your-eyes-palette-review-swatches/"
+    },
+    {
+      "brand": "Nars",
+      "name": "Wanted",
+      "type": "palette",
+      "shades": 12,
+      "status": "source-reviewed (shade order and approximate colours)",
+      "source_key": "Nars|Wanted",
+      "source_url": "https://www.johnlewis.com/nars-narsissist-palette-wanted/p3391534"
+    },
+    {
+      "brand": "Nars",
+      "name": "Skin Deep",
+      "type": "palette",
+      "shades": 12,
+      "status": "source-reviewed (partial; approximated colour; layout not fully confirmed)",
+      "source_key": "Nars|Skin Deep",
+      "source_url": "https://www.temptalia.com/product/nars-12-pan-eyeshadow-palette/skin-deep/",
+      "shade_description": "12 shade identities checked; pan positions not verified."
+    },
+    {
+      "brand": "Anastasia Beverly Hills",
+      "name": "Sultry",
+      "type": "palette",
+      "shades": 14,
+      "status": "source-reviewed (approximate colours)",
+      "source_key": "Anastasia Beverly Hills|Sultry"
+    },
+    {
+      "brand": "Anastasia Beverly Hills",
+      "name": "Soft Glam",
+      "type": "palette",
+      "shades": 14,
+      "status": "source-reviewed (approximate colours)",
+      "source_key": "Anastasia Beverly Hills|Soft Glam"
+    },
+    {
+      "brand": "Sigma",
+      "name": "Untamed",
+      "type": "palette",
+      "shades": 14,
+      "status": "source-reviewed (names; layout as qualified; HEX approximate)",
+      "source_key": "Sigma|Untamed",
+      "source_url": "https://www.lookfantastic.com/p/sigma-beauty-untamed-palette/12520229/",
+      "shade_description": "Retailer explicitly lists physical top and bottom rows of seven with finishes. HEX approximate."
+    },
+    {
+      "brand": "Natasha Denona",
+      "name": "Gold",
+      "type": "palette",
+      "shades": 15,
+      "status": "source-reviewed (HEX approximate; see source for verification scope)",
+      "source_key": "Natasha Denona|Gold",
+      "source_url": "https://www.lookfantastic.de/p/natasha-denona-gold-palette-37.5g/12355652/",
+      "shade_description": "Physical pan rows independently confirmed for original Gold."
+    },
+    {
+      "brand": "Natasha Denona",
+      "name": "Glam",
+      "type": "palette",
+      "shades": 15,
+      "status": "source-reviewed (approximate colours)",
+      "source_key": "Natasha Denona|Glam"
+    },
+    {
+      "brand": "Nabla",
+      "name": "Secret",
+      "type": "palette",
+      "shades": 15,
+      "status": "source-reviewed (shade names and descriptions; approximate colours; layout unverified)",
+      "source_key": null,
+      "source_url": "https://www.pinalli.it/products/make-up-secret-palette-2na887y90004",
+      "verification_note": "Batch 17: corrected names and colours; pan positions unverified."
+    },
+    {
+      "brand": "BH",
+      "name": "Love in London",
+      "type": "palette",
+      "shades": 16,
+      "status": "source-reviewed (names; layout as qualified; HEX approximate)",
+      "source_key": "BH|Love in London",
+      "source_url": "https://southeastbymidwest.com/2021/02/bh-cosmetics-love-in-london-palette/",
+      "shade_description": "Review describes 4-pan swatch rows; retailer confirms shade names and finishes. HEX approximate."
+    },
+    {
+      "brand": "BH",
+      "name": "Avocado Toast",
+      "type": "palette",
+      "shades": 16,
+      "status": "source-reviewed (names; layout as qualified; HEX approximate)",
+      "source_key": "BH|Avocado Toast",
+      "source_url": "https://www.kleinanzeigen.de/s-anzeige/bh-cosmetics-avocado-toast-eyeshadow-palette-gebraucht/3522672772-224-2701",
+      "shade_description": "16 shades and four lines of four listed in used-palette listing. Independent review groups swatches by columns instead; exact pan mapping remains photo-dependent. HEX approximate."
+    },
+    {
+      "brand": "Too Faced",
+      "name": "Pumpkin Spice",
+      "type": "palette",
+      "shades": 18,
+      "status": "source-reviewed (row order and names; HEX approximate)",
+      "source_key": "Too Faced|Pumpkin Spice",
+      "source_url": "https://www.lookfantastic.com/p/too-faced-pumpkin-spice-eyeshadow-palette/12671690/",
+      "shade_description": "2020 original Pumpkin Spice, not Second Slice. Retailer lists 18 shade names and top/bottom row order (9 each). HEX visually estimated; not measured."
+    }
+  ]
+}
