@@ -1,0 +1,1 @@
+v47: NARS Climax photo colour/layout correction; collection thumbnails share physical pan geometry with detail; standardized Viseart pan sizes; smaller Dior 669; no use count or history reset. Export Full Backup before updating.

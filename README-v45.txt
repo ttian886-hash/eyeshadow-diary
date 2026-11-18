@@ -1,0 +1,1 @@
+v45: Melt She's in Parties corrected to eight tall vertical pans in one row, with photo-referenced colors. Preserves counts, individual pan counts, archives and history. Backup before GitHub deployment.

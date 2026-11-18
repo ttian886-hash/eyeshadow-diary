@@ -1,0 +1,1 @@
+v49: Corrected NABLA Platinum 180-degree orientation: Rich Darling, Gem System, Tenebra / Aristocracy, Luxuriance, Priceless. Preserves use counts by shade name and keeps v48 collection miniatures. Export backup first.

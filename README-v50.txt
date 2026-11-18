@@ -1,0 +1,1 @@
+v50: Corrected NABLA Platinum 180-degree orientation: top Tenebra / Gem System / Rich Darling; bottom Priceless / Luxuriance / Aristocracy. Preserves usage counts by matching shade names. Both Collection thumbnail and expanded palette use the same data. Export Full Backup before deployment.

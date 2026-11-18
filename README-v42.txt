@@ -1,0 +1,1 @@
+v42: Corrected Charlotte Tilbury The Dolce Vita and Viseart Praline pan colours and 2x2 arrangement from user-provided photos. Corrects existing saved collections at runtime without changing palette totals, history, archive flags or shade-use totals. Export Full Backup before deploying.\n

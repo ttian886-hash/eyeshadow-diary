@@ -1,0 +1,1 @@
+v43: Unblinking photo-reference correction: 5 vertical powder pans in top row, separate horizontal 24K Gold cream foil below. Updates existing local data without resetting counts or history. Export Full Backup first.

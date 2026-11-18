@@ -1,0 +1,1 @@
+v44: bareMinerals Gen Nude Neutral corrected to 3 rows x 2 columns and photo-referenced shade colours. Includes v43 corrections. Preserves counts, shade uses, archive flags and history. Export Full Backup before deployment.

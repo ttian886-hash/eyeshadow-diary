@@ -1,0 +1,1 @@
+v48: NABLA Platinum 180-degree photo orientation correction, 3x2 palette and collection preview. Preserves counts by matching shade name. Collection thumbnails enlarged for readability. Export Full Backup before updating.
