@@ -1,0 +1,1 @@
+v37: History deletion adjusts product and selected palette shade counts. Legacy text-only records are adjusted only when shade labels uniquely resolve; otherwise deletion is blocked to avoid inaccurate totals. Remains on History. Export Full Backup before updating.

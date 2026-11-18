@@ -790,10 +790,36 @@ function saveLegacyHistoryEdit(){
  const h=history[legacyEditIndex];if(!h)return;
  h.items=[...legacyDraftItems];persist();go('history');toast('Look updated ✦');
 }
+// Resolve old text-only records only when every shade has a unique identity.
+function resolveLegacySelection(h){
+ if(!Array.isArray(h.items)||!h.items.length)return null;
+ const result=[];
+ for(const raw of h.items){
+  const label=String(raw).trim(),matches=[];
+  for(const x of data){
+   if(x.type==='single'){
+    if(label===x.name||label===x.brand+' '+x.name)matches.push({id:x.id,index:0});
+   }else if(Array.isArray(x.shades)){
+    x.shades.forEach((shade,index)=>{
+     if(label===x.name+' '+shade[0]||label===x.brand+' '+x.name+' '+shade[0])matches.push({id:x.id,index});
+    });
+   }
+  }
+  if(matches.length!==1)return null;
+  if(!result.some(v=>v.id===matches[0].id&&v.index===matches[0].index))result.push(matches[0]);
+ }
+ return result.length?result:null;
+}
 function deleteLegacyHistory(index){
- const h=history[index];if(!h||h.id&&Array.isArray(h.selection))return;
- if(!confirm('Delete this look from History? Its original usage totals will stay unchanged.'))return;
- history.splice(index,1);persist();render();toast('Old history record removed');
+ const h=history[index];if(!h||(h.id&&Array.isArray(h.selection)))return;
+ const selection=resolveLegacySelection(h);
+ if(!selection){alert('This older record has no reliable shade IDs. Its usage counts cannot be safely deducted, so nothing was deleted.');return;}
+ if(!confirm('Delete this older look and subtract 1 use from each selected shade and product?'))return;
+ const beforeTotal=data.reduce((sum,x)=>sum+(Number(x.uses)||0),0);
+ if(!historyDelta(selection,[])){alert('Cannot safely delete: one or more usage counts are already zero. No changes were made.');return;}
+ history.splice(index,1);lastSave=null;persist();
+ pendingHistoryStatsDelta+=data.reduce((sum,x)=>sum+(Number(x.uses)||0),0)-beforeTotal;
+ go('history');toast('Look and usage counts updated ✦');
 }
 function validHistorySelection(sel){return Array.isArray(sel)&&sel.every(v=>{const x=data.find(p=>p.id===v.id);return x&&Number.isInteger(v.index)&&v.index>=0&&(x.type==='single'?v.index===0:Array.isArray(x.shades)&&v.index<x.shades.length)})}
 function historyDelta(oldSel,newSel){
