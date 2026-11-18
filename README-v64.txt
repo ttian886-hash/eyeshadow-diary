@@ -1,0 +1,1 @@
+v64: Added per-shade Finished milestones with dates, edit/remove, History timeline and Hit Pan tab. Hit Pan and Finished are separate events. No photos or mood fields. Stored with product in existing backup format.

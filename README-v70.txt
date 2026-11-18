@@ -1,0 +1,1 @@
+v70: Natural irregular silver hit-pan opening in expanded palette only. Kevyn Aucoin Unblinking corrected 5 vertical powders + separate 24K Gold tube, using a crop of the user-provided reference photo. Finished remains full silver. Data, dates, counts unchanged. Export backup before deploying.

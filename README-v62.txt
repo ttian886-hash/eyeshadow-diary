@@ -1,0 +1,1 @@
+v62: Collection Show More/Show Less resets when leaving the collection flow; add/edit eyeshadow form compacted. Surratt photo retained as colour reference only; shade order unchanged. No localStorage schema or usage data reset.

@@ -1,0 +1,1 @@
+v68: Milestone controls are now tiny translucent corner glyphs rather than large white circles. Dense 7-12 column palette layouts retain their column order but scroll horizontally instead of crushing shade names. No data schema changes.

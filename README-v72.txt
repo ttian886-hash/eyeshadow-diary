@@ -1,0 +1,1 @@
+v72: Kevyn Aucoin Unblinking miniatures (Collection and Statistics Top 5) now match the expanded five vertical shades + one wide 24K Gold swatch layout. No milestone overlays in thumbnails. No data changes.
