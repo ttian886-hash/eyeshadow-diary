@@ -1,0 +1,1 @@
+v36 based on uploaded v35. Removed Restore Excel Counts from UI; compacted Statistics total and category shortcuts; removed repeated product type under bars; corrected only YSL 100 shadeUses entries equal to 40 to 41. Existing product usage totals and History preserved.

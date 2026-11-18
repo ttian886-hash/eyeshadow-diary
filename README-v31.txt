@@ -1,0 +1,1 @@
+v31: Based on v30. Restores Collection Show More/Show Less; hides redundant palette/single labels in filtered Statistics; animates only shade usage number; updates YSL 100 photo-derived swatches. No automatic subtraction of 18 uses: mobile backup is required to audit 1946 vs 1928. Export Full Backup before updating.

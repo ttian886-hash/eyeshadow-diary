@@ -1,0 +1,1 @@
+v30 is based on the supplied v29 ZIP. Corrects 49 palette baseline counts (1469), 27 singles (459), total (1928); approximates YSL 100 pan colours from owner photo; aligns View Look History spacing. Backup before deploying. Existing local usage is preserved conservatively; verify live totals if further looks were logged.

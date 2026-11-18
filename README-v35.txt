@@ -1,0 +1,1 @@
+v35: based on uploaded v34. Excel baseline checked: 49 palettes 1469, 27 singles 459, total 1928. Optional Restore Excel Counts button backs up first; does not silently overwrite saved counts. History edit/delete remain on History page and display usage delta when next opening Statistics. Stats top five plus Show More/Show Less. Existing History records preserved.

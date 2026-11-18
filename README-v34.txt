@@ -1,0 +1,1 @@
+v34: Rechecked Inventory-eyeshadow2.xlsx: 49 palettes (1469 uses), 27 singles (459 uses), total 1928. Existing v33 baseline already matches; no counts overwritten and local user activity preserved. Statistics total moved up; default chart shows top 5 with Show All to expand. All photos and layouts retained.
