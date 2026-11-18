@@ -1,0 +1,1 @@
+v83: Swapped Lisa Eldridge Iris and Liza preview HEX swatches only. Names, descriptions, counts, hit-pan, archive and history are unchanged. Existing manually edited colours remain untouched. Offline cache bumped to v83.

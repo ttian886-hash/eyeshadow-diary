@@ -1214,11 +1214,12 @@ data.forEach(x=>{let v=reviewedSingles[x.brand+'|'+x.name];if(x.type==='single'&
 })();
 
 
+// v83: swap Iris/Liza preview swatches per user correction; descriptions, names and counts unchanged.
 // Batch 18: manufacturer-verified shade descriptions. HEX colours remain approximate.
 (function batch18(){
  const fixes=[
-  ['Lisa Eldridge','Iris','#67516e','Liquid Lurex liquid eyeshadow: smoky amethyst with violet and fuchsia pearl; duochrome effect.','https://us.lisaeldridge.com/blogs/articles/best-eyeshadows-for-green-eyes'],
-  ['Lisa Eldridge','Liza','#46454d','Liquid Lurex liquid eyeshadow: intense charcoal with silver, magenta, violet, blue and green reflective pearls. Single HEX cannot show the multicolour finish.','https://us.lisaeldridge.com/products/liza-liquid-lurex-eyeshadow?variant=47125326266671'],
+  ['Lisa Eldridge','Iris','#46454d','Liquid Lurex liquid eyeshadow: smoky amethyst with violet and fuchsia pearl; duochrome effect.','https://us.lisaeldridge.com/blogs/articles/best-eyeshadows-for-green-eyes'],
+  ['Lisa Eldridge','Liza','#67516e','Liquid Lurex liquid eyeshadow: intense charcoal with silver, magenta, violet, blue and green reflective pearls. Single HEX cannot show the multicolour finish.','https://us.lisaeldridge.com/products/liza-liquid-lurex-eyeshadow?variant=47125326266671'],
   ['Lethal','Lithium','#8a797a','Metallic taupe single eyeshadow.','https://lethalcosmetics.com/products/lithium']
  ];
  for(const [brand,name,hex,description,url] of fixes){
