@@ -1,0 +1,1 @@
+v88: History Hit Pan tab renamed Specials (Hit Pan and Finished only). Archive Finished / Discarded renamed No Longer Owned, with separate Finished and Discarded reasons. Marking a single Finished auto-archives it; multi-shade palette auto-archives only when all shades are Finished. Discarded never creates a Specials record. Existing data retained.
