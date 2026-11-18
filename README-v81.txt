@@ -1,0 +1,1 @@
+v81: Dior 669 detail: Hit Pan/Finished buttons for shade 1 and 3 moved to upper-left corners. All other shade controls preserved. Five-shade legend spacing tightened. Service worker cache bumped to v81. No user data modified.
