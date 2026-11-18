@@ -1,0 +1,1 @@
+v54: Statistics Top 5 palettes now uses the same miniPalette(x) rendering as Collection, not one solid swatch. Dior 669 mini palette now has four corner pans with fifth centre diamond, matching detail layout. No usage, history, or archive data changes. Export Full Backup before deployment.
