@@ -1,0 +1,1 @@
+v57: Move Collection Look History link beside heading; harmonize Collection tabs; compact Archive category cards to 88px; reduce top whitespace. No changes to product counts, history, or archive data. Back up before updating.

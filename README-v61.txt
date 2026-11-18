@@ -1,0 +1,1 @@
+v61: Per-shade Hit Pan dates, silver pan marker in expanded palette only, History filters and milestone cards, Statistics count. Local storage and backups retain new hitPanShades fields. Export Full Backup before deploying.
