@@ -1794,25 +1794,49 @@ window.addEventListener('popstate',event=>{
  document.addEventListener('touchend',()=>{
   if(tracking&&pulled){
    indicator.textContent='↻ Refreshing…';
-   try{sessionStorage.setItem('diary_v89_refresh_view',JSON.stringify({page,showArchived,archiveCategory,collectionView,activeProduct,historyView:typeof historyView!=='undefined'?historyView:null}))}catch(e){}
+   try{sessionStorage.setItem('diary_v90_refresh_view',JSON.stringify({
+    page,showArchived,archiveCategory,collectionView,activeProduct,
+    historyTab,collectionExpanded,chosen,query,brandFilter,countFilter,
+    statsProductFilter,scrollX:window.scrollX||0,scrollY:window.scrollY||document.documentElement.scrollTop||0,
+    historyView:typeof historyView!=='undefined'?historyView:null
+   }))}catch(e){}
    location.reload();
   }else reset();
  },{passive:true});
  document.addEventListener('touchcancel',reset,{passive:true});
 })();
-// Restore view after an intentional pull-to-refresh (never modifies saved makeup data).
+// v90: restore the exact internal view, filters, expansion and scroll position
+// after intentional pull refresh. Only session UI state is stored; collection data is untouched.
+let diaryRefreshScroll=null;
 try{
- const saved=sessionStorage.getItem('diary_v89_refresh_view');
- if(saved){sessionStorage.removeItem('diary_v89_refresh_view');const v=JSON.parse(saved);
+ const saved=sessionStorage.getItem('diary_v90_refresh_view')||sessionStorage.getItem('diary_v89_refresh_view');
+ if(saved){
+  sessionStorage.removeItem('diary_v90_refresh_view');
+  sessionStorage.removeItem('diary_v89_refresh_view');
+  const v=JSON.parse(saved);
   if(typeof v.showArchived==='boolean')showArchived=v.showArchived;
-  if(typeof v.archiveCategory==='string')archiveCategory=v.archiveCategory;
-  if(typeof v.collectionView==='string')collectionView=v.collectionView;
+  if(['all','not_using','finished'].includes(v.archiveCategory))archiveCategory=v.archiveCategory;
+  if(['all','frequent'].includes(v.collectionView))collectionView=v.collectionView;
   if(typeof v.activeProduct==='string')activeProduct=v.activeProduct;
+  if(['all','milestones'].includes(v.historyTab)||typeof v.historyTab==='string')historyTab=v.historyTab;
+  if(typeof v.collectionExpanded==='boolean')collectionExpanded=v.collectionExpanded;
+  if(typeof v.chosen==='string')chosen=v.chosen;
+  if(typeof v.query==='string')query=v.query;
+  if(typeof v.brandFilter==='string')brandFilter=v.brandFilter;
+  if(typeof v.countFilter==='string')countFilter=v.countFilter;
+  if(typeof v.statsProductFilter==='string')statsProductFilter=v.statsProductFilter;
   if(v.historyView!==null&&typeof historyView!=='undefined')historyView=v.historyView;
-  if(['home','collection','pick','detail','add','edit','stats','history'].includes(v.page))page=v.page;
+  if(['home','collection','pick','detail','add','edit','stats','history','history-edit','history-legacy-edit'].includes(v.page))page=v.page;
+  if(Number.isFinite(v.scrollY))diaryRefreshScroll={x:Number(v.scrollX)||0,y:Math.max(0,v.scrollY)};
   window.history.replaceState({diaryPage:page,diarySerial:0},'',location.href);
  }
-}catch(e){}
+}catch(e){console.warn('Refresh view restoration skipped',e)}
 
 render();
+if(diaryRefreshScroll){
+ const pos=diaryRefreshScroll;
+ const restore=()=>window.scrollTo(pos.x,pos.y);
+ requestAnimationFrame(()=>requestAnimationFrame(restore));
+ window.addEventListener('load',restore,{once:true});
+}
 </script><script>if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost' || location.hostname==='127.0.0.1')){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(err=>console.warn('Offline setup unavailable:',err)));}</script></body></html>
