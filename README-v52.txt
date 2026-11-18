@@ -1,0 +1,1 @@
+v52: Archive from product detail returns to the previous Collection filter (including shade count such as 4), search, and expanded list; Archive shows five cards before Show More; Archive category/card spacing refined; Statistics total vertical spacing improved. No data reset. Export Full Backup before updating.

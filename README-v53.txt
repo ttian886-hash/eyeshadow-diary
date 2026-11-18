@@ -1,0 +1,1 @@
+v53: Collection and Archive show five items by default, with Show More from the sixth. Statistics total spacing moderated relative to v52. No changes to data model, use counts or archive filtering. Export Full Backup before deployment.
