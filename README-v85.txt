@@ -1,0 +1,1 @@
+v85: NARS Kalahari and Cordura, and Chantecaille Tibet miniature duo pan geometry unified. Tibet colours restored to original #777477 / #c5c3bf. Data, usage counts, history, hit-pan, archive untouched.

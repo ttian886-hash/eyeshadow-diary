@@ -1,0 +1,1 @@
+v84: Updated NARS Kalahari two-pan display colours using user-provided photo: left #B89A7C, right #B07974. Counts, history, shade order, hit-pan, archive unchanged. Existing saved collections receive display correction. HEX values approximate.
