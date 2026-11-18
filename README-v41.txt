@@ -1,0 +1,1 @@
+v41 local only: archive options exclude archived products; remain in Collection; polished dropdown; Unblinking six long pans. Export Full Backup before updating.
