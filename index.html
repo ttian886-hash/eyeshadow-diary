@@ -223,6 +223,15 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;min-height:100%;}
 .undo-look-button{display:flex;width:100%;min-height:49px;padding:15px;gap:9px;border:1px solid #cdbfc7;border-radius:6px;background:#faf7f8;color:#745e69;font-size:14px;font-weight:600;letter-spacing:normal}
 .undo-look-button svg{width:17px;height:17px}
 .history-link-arrow{display:inline-block;font-size:10px;line-height:1;vertical-align:1px;margin-left:3px;font-weight:400}
+
+/* v89: smaller archive counts, visibly shorter than the tabs above. */
+body.viewing-archive .archive-category-tabs{margin:10px 0 11px!important;gap:7px!important}
+body.viewing-archive .archive-category{height:56px!important;min-height:56px!important;max-height:56px!important;padding:4px 3px!important;gap:1px!important;border-radius:10px!important}
+body.viewing-archive .archive-category strong{font:normal 19px/1 Georgia,serif!important}
+body.viewing-archive .archive-category span{font-size:clamp(9px,2.15vw,10px)!important;line-height:1.12!important}
+#diary-pull-refresh{position:fixed;top:8px;left:50%;transform:translate(-50%,-140%);z-index:9999;background:#f5edf2;color:#594254;border:1px solid #dfd1d9;border-radius:999px;padding:8px 15px;font-size:12px;pointer-events:none;opacity:0;transition:transform .15s,opacity .15s;box-shadow:0 2px 10px #00000010}
+#diary-pull-refresh.visible{transform:translate(-50%,0);opacity:1}
+#diary-pull-refresh.ready{background:#e9dce5}
 </style>
 <style>
 .collection-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#f1eaee;border:1px solid #e7dce3;padding:5px;border-radius:12px;margin:16px 0 4px}.collection-tab{border:0;background:transparent;color:#776674;border-radius:9px;padding:12px 8px;font-size:12px;font-weight:600;transition:background .15s,color .15s}.collection-tab.active{background:white;color:#4e3948;box-shadow:0 1px 6px #3c263214}.collection-tab:focus-visible{outline:2px solid #806477;outline-offset:2px}.collection-footer{border-top:1px solid #e8dfe5;margin:28px 0 16px;padding:24px 0 4px}.collection-footer .eyebrow{margin-bottom:7px}.footer-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}.footer-actions .tiny{padding:10px 12px}.inventory-actions{margin:12px 0 18px}
@@ -1434,7 +1443,7 @@ function restoreExcelCounts(){
  lastSave=null;recentlySavedIds=[];statsSaveBump=0;persist();render();toast('Excel counts restored · '+changed+' updated');
 }
 let pendingHistoryStatsDelta=0;
-function persist(){localStorage.setItem('eyes_official_v1',JSON.stringify({data,history,lastSave}))}function el(id){return document.getElementById(id)}function go(p){if((page==='collection'&&p!=='collection'&&p!=='detail')||(page==='detail'&&p!=='collection'&&p!=='detail')||(page==='add'&&p!=='collection'&&p!=='add'))collectionExpanded=false;if(p==='stats'&&pendingHistoryStatsDelta){showStatsChange(pendingHistoryStatsDelta);pendingHistoryStatsDelta=0;}if(p!=='stats'&&typeof dismissQuickUndo==='function')dismissQuickUndo();if(['home','collection','stats','history'].includes(p))navPulse=p;if(page==='detail'&&p!=='detail')selected=[];if(p!=='stats')recentlySavedIds=[];page=p;render();scrollTo(0,0)}function header(t,s){return `<h1>${t}</h1><div class="sub">${s}</div>`}let statsProductFilter='all';
+function persist(){localStorage.setItem('eyes_official_v1',JSON.stringify({data,history,lastSave}))}function el(id){return document.getElementById(id)}function go(p){if(!window.__diaryRestoringNavigation && p!==page){window.__diaryNavSerial=(window.__diaryNavSerial||0)+1;window.history.pushState({diaryPage:p,diarySerial:window.__diaryNavSerial},'',location.href)}if((page==='collection'&&p!=='collection'&&p!=='detail')||(page==='detail'&&p!=='collection'&&p!=='detail')||(page==='add'&&p!=='collection'&&p!=='add'))collectionExpanded=false;if(p==='stats'&&pendingHistoryStatsDelta){showStatsChange(pendingHistoryStatsDelta);pendingHistoryStatsDelta=0;}if(p!=='stats'&&typeof dismissQuickUndo==='function')dismissQuickUndo();if(['home','collection','stats','history'].includes(p))navPulse=p;if(page==='detail'&&p!=='detail')selected=[];if(p!=='stats')recentlySavedIds=[];page=p;render();scrollTo(0,0)}function header(t,s){return `<h1>${t}</h1><div class="sub">${s}</div>`}let statsProductFilter='all';
 function setStatsProductFilter(type){statsProductFilter=statsProductFilter===type?'all':type;render();}
 let navPulse='';function nav(){el('nav').innerHTML=[["home", "<svg class=\"nav-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m3 10 9-7 9 7v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z\"/><path d=\"M9 21v-8h6v8\"/></svg>", "Home"], ["collection", "<svg class=\"nav-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z\"/></svg>", "Collection"], ["stats", "<svg class=\"nav-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3a9 9 0 1 0 9 9h-9z\"/><path d=\"M12 3v9h9A9 9 0 0 0 12 3z\"/></svg>", "Statistics"], ["history", "<svg class=\"nav-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 11a9 9 0 1 1 2.6 6.4\"/><path d=\"M3 4v7h7\"/><path d=\"M12 7v5l3 2\"/></svg>", "History"]].map(x=>`<button type="button" aria-label="${x[2]}" aria-current="${page===x[0]?'page':'false'}" class="${page===x[0]?'active':''} ${navPulse===x[0]?'nav-pulse':''}" onclick="go('${x[0]}')"><span class="nav-icon-wrap">${x[1]}</span><span class="nav-label">${x[2]}</span></button>`).join('');navPulse=''}
 const moods=[['Brown & Neutrals','earth',['#d7b9a0','#9d817b','#b4a0a0','#594b48']],['Pink & Mauve','rose',['#e3b2c1','#bb819e','#d5a4c8','#785268']],['Purple & Blue','violet',['#b9a4cc','#8b709f','#7e90bc','#3f526f']],['Green','olive',['#c2b69c','#8f987f','#a3a07a','#4b6358']]];
@@ -1751,5 +1760,59 @@ function hitPan(id){lastSave=null;let x=data.find(v=>v.id===id);x.hitPan=x.hitPa
   x.sourceStatus='User-provided photo reference; HEX estimated; shade names/order retained from collection';
  });
 })();
+
+// v89: make internal screens part of the browser's navigation history.
+window.history.replaceState({diaryPage:page,diarySerial:0},'',location.href);
+window.addEventListener('popstate',event=>{
+ const target=event.state&&event.state.diaryPage;
+ if(!target||!['home','collection','pick','detail','add','edit','stats','history'].includes(target))return;
+ window.__diaryRestoringNavigation=true;
+ try{go(target)}finally{window.__diaryRestoringNavigation=false}
+});
+// v89: pull down from the very top to refresh. Do not intercept normal scrolling,
+// inputs, or horizontal swipes; preserve the current screen and archive filters.
+(function enablePullRefresh(){
+ let startX=0,startY=0,tracking=false,pulled=false;
+ const indicator=document.createElement('div');indicator.id='diary-pull-refresh';
+ indicator.setAttribute('aria-live','polite');indicator.textContent='↓ Pull to refresh';
+ document.body.appendChild(indicator);
+ const reset=()=>{tracking=false;pulled=false;indicator.classList.remove('visible','ready')};
+ document.addEventListener('touchstart',e=>{
+  if(e.touches.length!==1)return reset();
+  const target=e.target;
+  if(target.closest('input,textarea,select,[contenteditable="true"],.modal,[role="dialog"]'))return reset();
+  tracking=(window.scrollY||document.documentElement.scrollTop||0)<=1;
+  startX=e.touches[0].clientX;startY=e.touches[0].clientY;pulled=false;
+ },{passive:true});
+ document.addEventListener('touchmove',e=>{
+  if(!tracking||e.touches.length!==1)return;
+  const dx=e.touches[0].clientX-startX,dy=e.touches[0].clientY-startY;
+  if(Math.abs(dx)>Math.abs(dy)*0.8||dy<0){reset();return}
+  pulled=dy>95;
+  if(dy>35){indicator.classList.add('visible');indicator.classList.toggle('ready',pulled);indicator.textContent=pulled?'↻ Release to refresh':'↓ Pull to refresh'}
+ },{passive:true});
+ document.addEventListener('touchend',()=>{
+  if(tracking&&pulled){
+   indicator.textContent='↻ Refreshing…';
+   try{sessionStorage.setItem('diary_v89_refresh_view',JSON.stringify({page,showArchived,archiveCategory,collectionView,activeProduct,historyView:typeof historyView!=='undefined'?historyView:null}))}catch(e){}
+   location.reload();
+  }else reset();
+ },{passive:true});
+ document.addEventListener('touchcancel',reset,{passive:true});
+})();
+// Restore view after an intentional pull-to-refresh (never modifies saved makeup data).
+try{
+ const saved=sessionStorage.getItem('diary_v89_refresh_view');
+ if(saved){sessionStorage.removeItem('diary_v89_refresh_view');const v=JSON.parse(saved);
+  if(typeof v.showArchived==='boolean')showArchived=v.showArchived;
+  if(typeof v.archiveCategory==='string')archiveCategory=v.archiveCategory;
+  if(typeof v.collectionView==='string')collectionView=v.collectionView;
+  if(typeof v.activeProduct==='string')activeProduct=v.activeProduct;
+  if(v.historyView!==null&&typeof historyView!=='undefined')historyView=v.historyView;
+  if(['home','collection','pick','detail','add','edit','stats','history'].includes(v.page))page=v.page;
+  window.history.replaceState({diaryPage:page,diarySerial:0},'',location.href);
+ }
+}catch(e){}
+
 render();
 </script><script>if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost' || location.hostname==='127.0.0.1')){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(err=>console.warn('Offline setup unavailable:',err)));}</script></body></html>
