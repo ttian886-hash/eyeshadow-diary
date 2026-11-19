@@ -1,4 +1,4 @@
-// v105: opt-in guarded automatic sync; preserves v104 manual backup and restore.
+// v106: opt-in guarded automatic sync; preserves v104 manual backup and restore.
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
 import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {getFirestore,doc,getDoc,runTransaction,onSnapshot} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
