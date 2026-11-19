@@ -10,7 +10,7 @@ window.refreshCloudUI=ui;
 function ref(){if(!user)throw Error('Sign in first');return doc(db,'users',user.uid,'data','main');}
 function count(snapshot){return snapshot.data.reduce((n,p)=>n+(p.type==='single'?1:(p.shades?.length||0)),0)}
 function summary(s){return `${s.data.length} products, ${count(s)} shades, ${s.history.length} history entries`;}
-function readSnapshot(docData){if(typeof docData.snapshotJson==='string')return JSON.parse(docData.snapshotJson);if(docData.snapshot)return docData.snapshot;throw Error('Cloud backup has no readable snapshot');}
+function readSnapshot(docData){if(!docData||typeof docData!=='object')throw Error('Cloud document is missing');let result;if(typeof docData.snapshotJson==='string')result=JSON.parse(docData.snapshotJson);else if(docData.snapshot&&typeof docData.snapshot==='object')result=docData.snapshot;else throw Error('Cloud backup has no readable snapshot');if(!result||!Array.isArray(result.data)||!Array.isArray(result.history))throw Error('Cloud backup format is invalid. No local data changed.');return result;}
 async function refresh(){if(!user)return;const snap=await getDoc(ref());cloudExists=snap.exists();cloudRevision=cloudExists?(snap.data().revision||null):null;status=`${user.email} · ${cloudExists?'Cloud backup available':'Cloud empty — phone upload required'}`;ui();}
 window.cloudSignIn=async()=>{busy=true;ui();try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(e){alert('Google sign-in failed: '+e.message)}finally{busy=false;ui()}};
 window.cloudSignOut=async()=>{await signOut(auth)};
@@ -32,5 +32,5 @@ window.cloudDownload=async()=>{if(!user||busy)return;busy=true;ui();try{
  if(!confirm(`RESTORE CLOUD TO THIS DEVICE?\n\nCloud: ${summary(incoming)}\nCurrent: ${summary(local)}\n\nThis REPLACES the local data. A JSON backup will download first. Ensure the download is saved before proceeding.`))return;
  window.diaryCloudBridge.downloadBackup();
  if(!confirm('Did your before-cloud-restore JSON backup download successfully? Click Cancel if not.'))return;
- window.diaryCloudBridge.applySnapshot(incoming);cloudRevision=remote.data().revision;cloudExists=true;status=`${user.email} · Cloud restored to this device`;alert('Cloud data restored.');
+ if(!window.diaryCloudBridge||typeof window.diaryCloudBridge.applySnapshot!=='function')throw Error('App restore bridge is unavailable. Reload and retry.');window.diaryCloudBridge.applySnapshot(incoming);cloudRevision=remote.data().revision;cloudExists=true;status=`${user.email} · Cloud restored to this device`;alert('Cloud data restored. The app will reload to show the restored collection.');location.reload();
  }catch(e){alert('Restore cancelled or failed: '+e.message)}finally{busy=false;ui()}};
