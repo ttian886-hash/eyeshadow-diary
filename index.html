@@ -1542,8 +1542,58 @@ let item=existing||{id:'custom_'+Date.now()+'_'+Math.random().toString(36).slice
 let oldUses=existing?.shadeUses||[];Object.assign(item,{brand,name,type,uses,sourceStatus:'User-entered; not independently verified',userEditedColour:true,reviewSource:'',reviewNote:'',reviewedLayout:type==='palette'?Math.min(cols,shades.length):1});
 if(type==='single'){item.color=shades[0][1];delete item.shades;delete item.shadeUses}else{item.shades=shades;item.shadeUses=shades.map((s,i)=>existing?.shades?.[i]?.[0]===s[0]?oldUses[i]||0:0);delete item.color}
 if(!existing)data.push(item);lastSave=null;persist();activeProduct=item.id;go('detail');toast(existing?'Updated ✦':'Added to Collection ✦')}
-function exportInventory(){let blob=new Blob([JSON.stringify({version:3,exportedAt:new Date().toISOString(),data,history,lastSave},null,2)],{type:'application/json'});let url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='eyeshadow-diary-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
-async function importInventory(file){if(!file)return;try{let obj=JSON.parse(await file.text());if(!Array.isArray(obj.data)||!obj.data.every(x=>typeof x.id==='string'&&typeof x.brand==='string'&&typeof x.name==='string'&&['single','palette'].includes(x.type))){throw Error('Invalid backup format')}if(!confirm('Replace current inventory and history with this backup? Export a backup first.'))return;data=obj.data;history=Array.isArray(obj.history)?obj.history:[];lastSave=null;selected=[];persist();go('collection');toast('Backup imported')}catch(e){alert('Could not import backup: '+e.message)}}
+function backupSummary(obj){
+ const products=obj.data.length, shades=obj.data.reduce((n,x)=>n+(x.type==='palette'?x.shades.length:1),0);
+ return `${products} products · ${shades} shades · ${obj.history.length} history entries`;
+}
+function validateBackup(obj){
+ if(!obj||typeof obj!=='object'||!Array.isArray(obj.data)||!Array.isArray(obj.history))throw Error('Backup must contain both inventory and history arrays.');
+ if(obj.data.length>10000||obj.history.length>100000)throw Error('Backup is unexpectedly large.');
+ const ids=new Set();
+ for(const x of obj.data){
+  if(!x||typeof x.id!=='string'||!x.id.trim()||typeof x.brand!=='string'||!x.brand.trim()||typeof x.name!=='string'||!x.name.trim()||!['single','palette'].includes(x.type))throw Error('A product is missing its identity or type.');
+  if(ids.has(x.id))throw Error('Duplicate product ID: '+x.id);ids.add(x.id);
+  if(x.type==='palette'&&(!Array.isArray(x.shades)||!x.shades.length||x.shades.length>100||!x.shades.every(sh=>Array.isArray(sh)&&typeof sh[0]==='string'&&typeof sh[1]==='string')))throw Error('Invalid palette shades: '+x.name);
+  if(x.type==='single'&&typeof x.color!=='string')throw Error('Missing single shade colour: '+x.name);
+  if(x.uses!==undefined&&(!Number.isFinite(x.uses)||x.uses<0))throw Error('Invalid usage count: '+x.name);
+  if(x.shadeUses!==undefined&&(!Array.isArray(x.shadeUses)||x.type!=='palette'||x.shadeUses.length!==x.shades.length||!x.shadeUses.every(n=>Number.isFinite(n)&&n>=0)))throw Error('Invalid per-shade counts: '+x.name);
+ }
+ for(const h of obj.history){if(!h||typeof h!=='object'||Array.isArray(h))throw Error('Invalid history entry.');}
+ return obj;
+}
+function downloadBackupPayload(payload,filename){
+ const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),3000);
+}
+function exportInventory(){
+ try{
+  const payload={version:3,exportedAt:new Date().toISOString(),data,history,lastSave};
+  downloadBackupPayload(payload,'eyeshadow-diary-backup.json');
+  localStorage.setItem('eyes_diary_last_backup_export',payload.exportedAt);
+  toast('Backup download started ✦');
+ }catch(e){alert('Could not export backup: '+e.message)}
+}
+async function importInventory(file){
+ if(!file)return;
+ try{
+  if(file.size>30*1024*1024)throw Error('Backup file is too large.');
+  const obj=validateBackup(JSON.parse(await file.text()));
+  const current={version:3,exportedAt:new Date().toISOString(),data,history,lastSave};
+  const message=`Import this backup?\n\nIncoming: ${backupSummary(obj)}\nCurrent: ${backupSummary(current)}\n\nThis will replace the current collection and history. A safety copy of the current data will be downloaded first.`;
+  if(!confirm(message))return;
+  // Keep a recoverable copy in localStorage before replacing anything.
+  const previous=localStorage.getItem('eyes_official_v1');
+  if(previous!==null)localStorage.setItem('eyes_diary_pre_import_backup',previous);
+  else localStorage.setItem('eyes_diary_pre_import_backup',JSON.stringify({data,history,lastSave}));
+  downloadBackupPayload(current,'eyeshadow-diary-before-import.json');
+  const next={data:obj.data,history:obj.history,lastSave:null};
+  // Commit to storage first; only switch live state if writing succeeds.
+  try{localStorage.setItem('eyes_official_v1',JSON.stringify(next))}
+  catch(e){if(previous!==null)localStorage.setItem('eyes_official_v1',previous);throw e}
+  data=next.data;history=next.history;lastSave=null;selected=[];
+  go('collection');toast('Backup imported ✦');
+ }catch(e){alert('Could not import backup. Your current data has not been replaced unless the import completed.\n'+e.message)}
+}
 
 function classifyShadowColour(hex){
  if(typeof hex!=='string'||!/^#[0-9a-f]{6}$/i.test(hex))return null;
