@@ -10,8 +10,15 @@ const bridge=()=>window.diaryCloudBridge;
 const snapshot=()=>bridge().getSnapshot();
 const encode=s=>JSON.stringify({data:s.data,history:s.history,lastSave:s.lastSave??null});
 const key=()=>`eyes_diary_auto_v105_${user.uid}`;
-function ui(){const e=document.getElementById('cloud-status');if(e)e.textContent=status;for(const [id,enabled] of [['cloud-login',!user],['cloud-logout',!!user],['cloud-upload',!!user&&!auto],['cloud-download',!!user&&cloudExists&&!auto],['cloud-auto',!!user&&!auto&&cloudExists],['cloud-auto-stop',!!user&&auto]]){const b=document.getElementById(id);if(b)b.disabled=busy||!enabled;}}
-window.refreshCloudUI=ui;
+function ui(){const e=document.getElementById('cloud-status');if(e)e.textContent=status;const compact=document.getElementById('cloud-compact-indicator');if(compact)compact.textContent=!user?'Not connected':auto?(status.includes('Checking')?'Checking updates…':'Auto sync on ✓'):conflict?'Sync paused ⚠':cloudExists?'Manual mode':'Cloud unavailable';for(const [id,enabled] of [['cloud-login',!user],['cloud-logout',!!user],['cloud-upload',!!user&&!auto],['cloud-download',!!user&&cloudExists&&!auto],['cloud-auto',!!user&&!auto&&cloudExists],['cloud-auto-stop',!!user&&auto]]){const b=document.getElementById(id);if(b)b.disabled=busy||!enabled;}}
+const oldUi=ui;
+function updateCompactStatus(){const e=document.getElementById('cloud-compact-indicator');if(!e)return;e.textContent=!user?'Not connected':auto?(status.includes('Checking')?'Checking updates…':status.includes('Updated')?'Updated ✓':'Auto sync on ✓'):conflict?'Sync paused ⚠':cloudExists?'Manual mode':'Cloud unavailable';}
+const originalUi=ui;
+// Compact summary remains visible even while the details are collapsed.
+const compactObserver=new MutationObserver(updateCompactStatus);
+function attachCompactObserver(){const e=document.getElementById('cloud-status');if(e){compactObserver.disconnect();compactObserver.observe(e,{childList:true,characterData:true,subtree:true});updateCompactStatus();}}
+window.refreshCloudUI=()=>{originalUi();attachCompactObserver();};
+
 function ref(){if(!user)throw Error('Sign in first');return doc(db,'users',user.uid,'data','main');}
 function count(s){return s.data.reduce((n,p)=>n+(p.type==='single'?1:(p.shades?.length||0)),0)}
 function summary(s){return `${s.data.length} products, ${count(s)} shades, ${s.history.length} history entries`;}
