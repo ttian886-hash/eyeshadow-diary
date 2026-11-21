@@ -6,6 +6,7 @@ const config={apiKey:'AIzaSyBZYn5k1OJzHA0JF7EF3deh0Wvcy6HGDL0',authDomain:'eyesh
 const app=initializeApp(config),auth=getAuth(app),db=getFirestore(app);
 let user=null,busy=false,cloudRevision=null,cloudExists=false,status='Not signed in · Local data stays on this device';
 let auto=false,baseline=null,listener=null,flushTimer=null,flushing=false,conflict=false,remoteRevision=null;
+let lastCloudRaw=null;
 const bridge=()=>window.diaryCloudBridge;
 const snapshot=()=>bridge().getSnapshot();
 const encode=s=>JSON.stringify({data:s.data,history:s.history,lastSave:s.lastSave??null});
@@ -14,10 +15,11 @@ const key=()=>`eyes_diary_auto_v105_${user.uid}`;
 let lastTransfer=null;
 function markTransfer(action){lastTransfer={action,time:new Date()};}
 function syncSummary(){
+ if(typeof navigator!=='undefined'&&navigator.onLine===false)return 'Offline · device data available';
  if(!user)return 'Not connected';
  if(conflict||/paused|failed/i.test(status))return 'Sync needs attention';
  if(busy||flushing)return 'Syncing…';
- if(auto){if(/Checking/i.test(status))return 'Checking updates…';return encode(snapshot())!==baseline?'Changes pending':'Auto sync on';}
+ if(auto){if(/Waiting for cloud/i.test(status))return 'Waiting for cloud';if(/Checking/i.test(status))return 'Checking updates…';return encode(snapshot())!==baseline?'Changes pending':'Auto sync on';}
  return cloudExists?'Auto sync off':'Cloud backup not set up';
 }
 function ui(){
@@ -38,15 +40,15 @@ function readSnapshot(d){if(!d||typeof d!=='object')throw Error('Cloud document 
 function stopWatcher(){if(listener){listener();listener=null;}clearTimeout(flushTimer);flushTimer=null;}
 function pause(message){auto=false;conflict=true;localStorage.removeItem(key());stopWatcher();status=`SYNC PAUSED · ${message} · Local data preserved`;ui();alert('Automatic sync paused: '+message+'\nNo local or cloud data was overwritten. Export a backup before resolving the conflict.');}
 function setBaseline(rev,raw){baseline=raw;cloudRevision=rev;remoteRevision=rev;localStorage.setItem(key(),JSON.stringify({revision:rev,baseline:raw}));}
-async function refresh(){if(!user)return;const s=await getDoc(ref());cloudExists=s.exists();cloudRevision=cloudExists?(s.data().revision||null):null;status=`${user.email} · ${cloudExists?'Cloud backup available':'Cloud empty — phone upload required'}`;ui();}
-async function receive(s){if(!user||!auto)return;if(flushing){setTimeout(()=>{if(auto)receive(s).catch(e=>pause(e.message));},350);return;}if(!s.exists()){pause('Cloud backup was removed');return;}const d=s.data(),rev=d.revision||null;if(rev===remoteRevision){status=`${user.email} · Auto sync up to date`;ui();return;}
+async function refresh(){if(!user)return;const s=await getDoc(ref());cloudExists=s.exists();cloudRevision=cloudExists?(s.data().revision||null):null;lastCloudRaw=cloudExists?encode(readSnapshot(s.data())):null;status=`${user.email} · ${cloudExists?'Cloud backup available':'Cloud empty — phone upload required'}`;ui();}
+async function receive(s){if(!user||!auto)return;if(flushing){setTimeout(()=>{if(auto)receive(s).catch(e=>pause(e.message));},350);return;}if(s.metadata?.fromCache||s.metadata?.hasPendingWrites){status=`${user.email} · Waiting for cloud confirmation`;ui();return;}if(!s.exists()){pause('Cloud backup was removed');return;}const d=s.data(),rev=d.revision||null;if(rev===remoteRevision){status=`${user.email} · Auto sync up to date`;ui();return;}
  const raw=encode(readSnapshot(d));const local=encode(snapshot());
  if(local!==baseline){pause('Both device and cloud have changes');return;}
  if(raw!==local){try{bridge().applySnapshot(JSON.parse(raw));setBaseline(rev,raw);markTransfer('Received successfully');status=`${user.email} · Updated from cloud · Reloading`;ui();location.reload();}catch(e){pause('Cloud restore failed: '+e.message);}return;}
  setBaseline(rev,raw);status=`${user.email} · Auto sync up to date`;ui();}
 function watch(){stopWatcher();listener=onSnapshot(ref(),s=>{receive(s).catch(e=>pause('Cloud update failed: '+e.message));},e=>pause('Cloud listener failed: '+e.message));}
-function schedule(){if(!auto||!user||busy||conflict)return;ui();clearTimeout(flushTimer);flushTimer=setTimeout(()=>flush().catch(e=>pause(e.message)),900);}
-async function flush(){if(!auto||flushing||!user||busy)return;const local=encode(snapshot());if(local===baseline)return;flushing=true;try{
+function schedule(){if(!auto||!user||busy||conflict)return;if(typeof navigator!=='undefined'&&navigator.onLine===false){ui();return;}ui();clearTimeout(flushTimer);flushTimer=setTimeout(()=>flush().catch(e=>pause(e.message)),900);}
+async function flush(){if(!auto||flushing||!user||busy)return;if(typeof navigator!=='undefined'&&navigator.onLine===false){ui();return;}const local=encode(snapshot());if(local===baseline)return;flushing=true;try{
  const expected=cloudRevision;const rev=crypto.randomUUID();if(new Blob([local]).size>850000)throw Error('Backup exceeds Firestore document size');
  await runTransaction(db,async tx=>{const s=await tx.get(ref());if(!s.exists()||s.data().revision!==expected)throw Error('Cloud changed before this device uploaded');tx.set(ref(),{snapshotJson:local,revision:rev,updatedAt:new Date().toISOString(),schemaVersion:3,encoding:'json'});});
  // A second edit made during the network request remains pending and will be uploaded separately.
@@ -63,7 +65,7 @@ window.cloudAutoStop=()=>{if(!auto)return;auto=false;stopWatcher();localStorage.
 window.addEventListener('diary-local-change',()=>{if(auto)schedule()});
 window.cloudSignIn=async()=>{busy=true;ui();try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(e){alert('Google sign-in failed: '+e.message)}finally{busy=false;ui()}};
 window.cloudSignOut=async()=>{window.cloudAutoStop();await signOut(auth)};
-onAuthStateChanged(auth,async u=>{stopWatcher();auto=false;baseline=null;user=u;lastTransfer=null;cloudExists=false;cloudRevision=null;status=u?'Checking private cloud…':'Not signed in · Local data stays on this device';ui();if(u)try{await refresh();const stored=localStorage.getItem(key());if(stored){const prior=JSON.parse(stored);const local=encode(snapshot());if(prior.baseline===local&&cloudExists){auto=true;baseline=local;remoteRevision=prior.revision;status=`${u.email} · Auto sync enabled · Checking cloud updates`;watch();}else{localStorage.removeItem(key());status=`${u.email} · Auto sync paused: verify device and cloud before enabling`;}}ui();}catch(e){status='Cloud check failed: '+e.message;ui()}});
+onAuthStateChanged(auth,async u=>{stopWatcher();auto=false;baseline=null;user=u;lastTransfer=null;cloudExists=false;cloudRevision=null;status=u?'Checking private cloud…':'Not signed in · Local data stays on this device';ui();if(u)try{await refresh();const stored=localStorage.getItem(key());if(stored){const prior=JSON.parse(stored);const local=encode(snapshot());if(cloudExists&&(prior.baseline===local||(cloudRevision===prior.revision&&lastCloudRaw===prior.baseline))){auto=true;baseline=prior.baseline;remoteRevision=prior.revision;status=`${u.email} · Auto sync enabled · Checking cloud updates`;watch();if(local!==baseline)schedule();}else{localStorage.removeItem(key());status=`${u.email} · Auto sync paused: verify device and cloud before enabling`;}}ui();}catch(e){status='Cloud check failed: '+e.message;ui()}});
 window.cloudUpload=async()=>{if(!user||busy||auto)return;busy=true;ui();try{
  const local=snapshot(),remote=await getDoc(ref());if(remote.exists()&&remote.data().revision!==cloudRevision)throw Error('Cloud changed since last check. Reload before uploading.');
  const warning=remote.exists()?`Replace existing cloud data?\n\nLocal: ${summary(local)}\nCloud: ${summary(readSnapshot(remote.data()))}\n\nThis does not merge changes. Export a local JSON backup first.`:`FIRST CLOUD UPLOAD\n\nLocal: ${summary(local)}\n\nOnly upload from the PHONE that has your verified data.`;
@@ -77,3 +79,7 @@ window.cloudDownload=async()=>{if(!user||busy||auto)return;busy=true;ui();try{
  bridge().downloadBackup();if(!confirm('Did your before-cloud-restore JSON backup download successfully? Cancel if not.'))return;
  bridge().applySnapshot(incoming);cloudRevision=remote.data().revision;cloudExists=true;status=`${user.email} · Cloud restored to this device`;alert('Cloud data restored. The app will reload.');location.reload();
  }catch(e){alert('Restore cancelled or failed: '+e.message)}finally{busy=false;ui()}};
+
+window.addEventListener('offline',ui);
+window.addEventListener('online',()=>{ui();if(auto)schedule()});
+window.dispatchEvent(new Event('diary-cloud-ready'));

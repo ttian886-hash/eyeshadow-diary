@@ -1,11 +1,18 @@
-// v107: network-first HTML so deployed fixes do not stay hidden behind an old offline copy.
-const CACHE='eyes-diary-pwa-v177';
+// v178: cache local app files for offline use; never return HTML as JavaScript.
+const CACHE='eyes-diary-pwa-v178';
 const FILES=['./','./index.html','./firebase-cloud.js','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./icons/icon-180.png','./assets/powder-0.png','./assets/powder-1.png','./assets/powder-2.png','./assets/powder-3.png','./assets/kevyn-unblinking-24k.png'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('eyes-diary-pwa-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
-self.addEventListener('fetch',event=>{const req=event.request;if(req.method!=='GET'||new URL(req.url).origin!==self.location.origin)return;
- if(req.mode==='navigate'||new URL(req.url).pathname.endsWith('/index.html')||new URL(req.url).pathname.endsWith('/firebase-cloud.js')){
-  event.respondWith(fetch(req).then(res=>{if(res.ok){const copy=res.clone();caches.open(CACHE).then(c=>c.put(req,copy));}return res;}).catch(()=>caches.match(req).then(r=>r||caches.match('./index.html'))));return;
+self.addEventListener('fetch',event=>{
+ const req=event.request,url=new URL(req.url);if(req.method!=='GET'||url.origin!==self.location.origin)return;
+ const script=url.pathname.endsWith('/firebase-cloud.js'),html=req.mode==='navigate'||url.pathname.endsWith('/index.html');
+ if(script||html){
+  event.respondWith(fetch(req).then(res=>{if(res.ok){const copy=res.clone();event.waitUntil(caches.open(CACHE).then(c=>c.put(req,copy)));}return res;}).catch(async()=>{
+   const cache=await caches.open(CACHE),cached=await cache.match(req,{ignoreSearch:true});
+   if(cached)return cached;
+   if(html){const fallback=await cache.match('./index.html');if(fallback)return fallback;}
+   return Response.error();
+  }));return;
  }
- event.respondWith(caches.match(req).then(cached=>cached||fetch(req).then(res=>{if(res.ok){const copy=res.clone();caches.open(CACHE).then(c=>c.put(req,copy));}return res;})));
+ event.respondWith(caches.open(CACHE).then(async cache=>{const cached=await cache.match(req);if(cached)return cached;const res=await fetch(req);if(res.ok){const copy=res.clone();event.waitUntil(cache.put(req,copy));}return res;}));
 });
