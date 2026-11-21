@@ -18,8 +18,10 @@ function markTransfer(action){lastTransfer={action,time:new Date()};}
 function syncSummary(){
  if(typeof navigator!=='undefined'&&navigator.onLine===false)return 'Offline · device data available';
  if(!user)return 'Not connected';
- if(conflict||/paused|failed/i.test(status))return 'Sync needs attention';
+ if(conflict)return 'Sync paused · data conflict';
  if(connectionRetryPending)return 'Waiting to reconnect';
+ if(/failed/i.test(status))return 'Sync failed';
+ if(/paused/i.test(status))return 'Sync paused';
  if(busy||flushing)return 'Syncing…';
  if(auto){if(/Waiting for cloud/i.test(status))return 'Waiting for cloud';if(/Checking/i.test(status))return 'Checking updates…';return encode(snapshot())!==baseline?'Changes pending':'Auto sync on';}
  return cloudExists?'Auto sync off':'Cloud backup not set up';
