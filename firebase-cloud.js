@@ -7,6 +7,7 @@ const app=initializeApp(config),auth=getAuth(app),db=getFirestore(app);
 let user=null,busy=false,cloudRevision=null,cloudExists=false,status='Not signed in · Local data stays on this device';
 let auto=false,baseline=null,listener=null,flushTimer=null,flushing=false,conflict=false,remoteRevision=null;
 let lastCloudRaw=null;
+let connectionEpoch=0,connectionTask=null,connectionRetryPending=false,connectionRetryTimer=null,connectionRetryCount=0;
 const bridge=()=>window.diaryCloudBridge;
 const snapshot=()=>bridge().getSnapshot();
 const encode=s=>JSON.stringify({data:s.data,history:s.history,lastSave:s.lastSave??null});
@@ -18,17 +19,18 @@ function syncSummary(){
  if(typeof navigator!=='undefined'&&navigator.onLine===false)return 'Offline · device data available';
  if(!user)return 'Not connected';
  if(conflict||/paused|failed/i.test(status))return 'Sync needs attention';
+ if(connectionRetryPending)return 'Waiting to reconnect';
  if(busy||flushing)return 'Syncing…';
  if(auto){if(/Waiting for cloud/i.test(status))return 'Waiting for cloud';if(/Checking/i.test(status))return 'Checking updates…';return encode(snapshot())!==baseline?'Changes pending':'Auto sync on';}
  return cloudExists?'Auto sync off':'Cloud backup not set up';
 }
 function ui(){
  const put=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};
- put('cloud-status',status);document.getElementById('cloud-status')?.classList.toggle('cloud-attention',conflict||/paused|failed|empty/i.test(status));put('cloud-compact-indicator',syncSummary());
+ put('cloud-status',status);document.getElementById('cloud-status')?.classList.toggle('cloud-attention',conflict||/paused|failed|empty|unavailable/i.test(status));put('cloud-compact-indicator',syncSummary());
  put('cloud-account',user?.email||'Sign in to sync across devices');
  put('cloud-last-transfer',lastTransfer?lastTransfer.action+' · '+new Intl.DateTimeFormat(undefined,{hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(lastTransfer.time):'No confirmed transfer in this session');
  const toggle=document.getElementById('cloud-auto-toggle');if(toggle){toggle.checked=auto;toggle.disabled=busy||!user||(!auto&&!cloudExists);}
- for(const [id,enabled] of [['cloud-login',!user],['cloud-logout',!!user],['cloud-upload',!!user&&!auto],['cloud-download',!!user&&cloudExists&&!auto]]){const el=document.getElementById(id);if(el)el.disabled=busy||!enabled;}
+ for(const [id,enabled] of [['cloud-retry',!!user&&connectionRetryPending],['cloud-login',!user],['cloud-logout',!!user],['cloud-upload',!!user&&!auto],['cloud-download',!!user&&cloudExists&&!auto]]){const el=document.getElementById(id);if(el)el.disabled=busy||!enabled;}
 }
 window.refreshCloudUI=ui;
 window.cloudToggleAuto=()=>auto?window.cloudAutoStop():window.cloudAutoStart();
@@ -40,7 +42,43 @@ function readSnapshot(d){if(!d||typeof d!=='object')throw Error('Cloud document 
 function stopWatcher(){if(listener){listener();listener=null;}clearTimeout(flushTimer);flushTimer=null;}
 function pause(message){auto=false;conflict=true;localStorage.removeItem(key());stopWatcher();status=`SYNC PAUSED · ${message} · Local data preserved`;ui();alert('Automatic sync paused: '+message+'\nNo local or cloud data was overwritten. Export a backup before resolving the conflict.');}
 function setBaseline(rev,raw){baseline=raw;cloudRevision=rev;remoteRevision=rev;localStorage.setItem(key(),JSON.stringify({revision:rev,baseline:raw}));}
-async function refresh(){if(!user)return;const s=await getDoc(ref());cloudExists=s.exists();cloudRevision=cloudExists?(s.data().revision||null):null;lastCloudRaw=cloudExists?encode(readSnapshot(s.data())):null;status=`${user.email} · ${cloudExists?'Cloud backup available':'Cloud empty — phone upload required'}`;ui();}
+async function refresh(epoch=connectionEpoch){
+ if(!user)return false;const uid=user.uid,remote=ref(),s=await getDoc(remote);
+ if(epoch!==connectionEpoch||user?.uid!==uid)return false;
+ if(s.metadata?.fromCache)throw Error('Waiting for a live cloud connection');
+ cloudExists=s.exists();cloudRevision=cloudExists?(s.data().revision||null):null;lastCloudRaw=cloudExists?encode(readSnapshot(s.data())):null;
+ status=`${user.email} · ${cloudExists?'Cloud backup available':'Cloud empty — phone upload required'}`;ui();return true;
+}
+function queueConnectionRetry(){
+ clearTimeout(connectionRetryTimer);
+ if(!connectionRetryPending||!user||conflict||connectionRetryCount>=6||typeof navigator!=='undefined'&&navigator.onLine===false)return;
+ const delay=Math.min(30000,2000*2**connectionRetryCount++);
+ connectionRetryTimer=setTimeout(()=>{connectionRetryTimer=null;checkCloudConnection();},delay);
+}
+function checkCloudConnection(){
+ if(!user)return Promise.resolve();
+ if(connectionTask?.epoch===connectionEpoch)return connectionTask.promise;
+ const token={epoch:connectionEpoch};connectionTask=token;
+ token.promise=(async()=>{
+  try{
+   if(!await refresh(token.epoch))return;
+   if(token.epoch!==connectionEpoch)return;
+   connectionRetryPending=false;connectionRetryCount=0;clearTimeout(connectionRetryTimer);
+   const stored=localStorage.getItem(key());
+   if(stored){
+    const prior=JSON.parse(stored),local=encode(snapshot());
+    if(cloudExists&&(prior.baseline===local||(cloudRevision===prior.revision&&lastCloudRaw===prior.baseline))){
+     auto=true;baseline=prior.baseline;remoteRevision=prior.revision;status=`${user.email} · Auto sync enabled · Checking cloud updates`;watch();if(local!==baseline)schedule();
+    }else{auto=false;conflict=true;localStorage.removeItem(key());status=`${user.email} · Auto sync paused: device and cloud need review`;}
+   }
+  }catch(e){
+   if(token.epoch!==connectionEpoch)return;
+   connectionRetryPending=true;status='Cloud connection unavailable · Device data preserved. Reconnect or retry.';queueConnectionRetry();
+  }finally{if(connectionTask===token)connectionTask=null;if(token.epoch===connectionEpoch)ui();}
+ })();return token.promise;
+}
+window.cloudRetryConnection=()=>{connectionRetryCount=0;return checkCloudConnection()};
+
 async function receive(s){if(!user||!auto)return;if(flushing){setTimeout(()=>{if(auto)receive(s).catch(e=>pause(e.message));},350);return;}if(s.metadata?.fromCache||s.metadata?.hasPendingWrites){status=`${user.email} · Waiting for cloud confirmation`;ui();return;}if(!s.exists()){pause('Cloud backup was removed');return;}const d=s.data(),rev=d.revision||null;if(rev===remoteRevision){status=`${user.email} · Auto sync up to date`;ui();return;}
  const raw=encode(readSnapshot(d));const local=encode(snapshot());
  if(local!==baseline){pause('Both device and cloud have changes');return;}
@@ -65,7 +103,11 @@ window.cloudAutoStop=()=>{if(!auto)return;auto=false;stopWatcher();localStorage.
 window.addEventListener('diary-local-change',()=>{if(auto)schedule()});
 window.cloudSignIn=async()=>{busy=true;ui();try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(e){alert('Google sign-in failed: '+e.message)}finally{busy=false;ui()}};
 window.cloudSignOut=async()=>{window.cloudAutoStop();await signOut(auth)};
-onAuthStateChanged(auth,async u=>{stopWatcher();auto=false;baseline=null;user=u;lastTransfer=null;cloudExists=false;cloudRevision=null;status=u?'Checking private cloud…':'Not signed in · Local data stays on this device';ui();if(u)try{await refresh();const stored=localStorage.getItem(key());if(stored){const prior=JSON.parse(stored);const local=encode(snapshot());if(cloudExists&&(prior.baseline===local||(cloudRevision===prior.revision&&lastCloudRaw===prior.baseline))){auto=true;baseline=prior.baseline;remoteRevision=prior.revision;status=`${u.email} · Auto sync enabled · Checking cloud updates`;watch();if(local!==baseline)schedule();}else{localStorage.removeItem(key());status=`${u.email} · Auto sync paused: verify device and cloud before enabling`;}}ui();}catch(e){status='Cloud check failed: '+e.message;ui()}});
+onAuthStateChanged(auth,async u=>{
+ connectionEpoch++;clearTimeout(connectionRetryTimer);connectionRetryPending=false;connectionRetryCount=0;
+ stopWatcher();auto=false;baseline=null;conflict=false;user=u;lastTransfer=null;cloudExists=false;cloudRevision=null;lastCloudRaw=null;
+ status=u?'Checking private cloud…':'Not signed in · Local data stays on this device';ui();if(u)await checkCloudConnection();
+});
 window.cloudUpload=async()=>{if(!user||busy||auto)return;busy=true;ui();try{
  const local=snapshot(),remote=await getDoc(ref());if(remote.exists()&&remote.data().revision!==cloudRevision)throw Error('Cloud changed since last check. Reload before uploading.');
  const warning=remote.exists()?`Replace existing cloud data?\n\nLocal: ${summary(local)}\nCloud: ${summary(readSnapshot(remote.data()))}\n\nThis does not merge changes. Export a local JSON backup first.`:`FIRST CLOUD UPLOAD\n\nLocal: ${summary(local)}\n\nOnly upload from the PHONE that has your verified data.`;
@@ -81,5 +123,6 @@ window.cloudDownload=async()=>{if(!user||busy||auto)return;busy=true;ui();try{
  }catch(e){alert('Restore cancelled or failed: '+e.message)}finally{busy=false;ui()}};
 
 window.addEventListener('offline',ui);
-window.addEventListener('online',()=>{ui();if(auto)schedule()});
+window.addEventListener('online',()=>{connectionRetryCount=0;ui();if(auto)schedule();else if(connectionRetryPending)checkCloudConnection()});
+document.addEventListener?.('visibilitychange',()=>{if(document.visibilityState==='visible'&&connectionRetryPending){connectionRetryCount=0;checkCloudConnection()}});
 window.dispatchEvent(new Event('diary-cloud-ready'));
