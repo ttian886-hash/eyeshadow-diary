@@ -2485,7 +2485,7 @@ body #page .product-direct-action svg{width:18px;height:18px}
 body #page .product-direct-action:hover:after,body #page .product-direct-action:focus-visible:after{content:attr(data-tooltip);position:absolute;top:100%;right:0;background:var(--diary-ink);color:white;font-size:12px;padding:5px 8px;border-radius:4px;z-index:20;white-space:nowrap}
 body #page .collection-favorite-display{position:absolute;top:12px;right:12px;display:block;color:var(--diary-secondary);opacity:.65;pointer-events:none}
 body #page .collection-favorite-display svg{width:13px;height:13px}
-body #page .detail-shade-panel .detail-palette-with-tools>.palette{width:100%!important;max-width:min(100%,var(--product-palette-width))!important;margin-inline:auto!important;align-self:center!important;column-gap:12px!important}
+body #page .detail-shade-panel .detail-palette-with-tools>.palette[data-shade-count]{width:100%!important;max-width:min(100%,var(--product-palette-width))!important;margin-inline:auto!important;align-self:center!important;column-gap:12px!important}
 body #page .detail-shade-panel .palette.single-detail-palette{max-width:110px!important;margin-inline:auto!important;align-self:center!important}
 body #page .detail-shade-panel .palette.single-detail-palette .shade>small{text-align:center}
 body #page .detail-shade-panel .palette.single-detail-palette .shade-use-count{text-align:center}
@@ -3263,6 +3263,7 @@ function syncDetailTools(){
   shades.forEach((sh,i)=>{const inLook=recording&&selected.some(v=>v.id===x.id&&v.index===i),button=document.createElement('button');button.type='button';button.className='product-shade-name'+(inLook?' selected':'');button.dataset.shadeIndex=i;button.dataset.productId=x.id;button.setAttribute('aria-label',sh[0]);button.setAttribute('aria-pressed',String(inLook));button.onclick=()=>toggleShade(x.id,i);button.innerHTML='<i style="background:'+escapeHtml(sh[1])+'" aria-hidden="true"></i><span>'+escapeHtml(sh[0])+'</span><b aria-hidden="true">'+(inLook?'✓':'')+'</b>';names.append(button)});document.querySelector('.detail-palette-with-tools').after(names);
  }
  panel.querySelectorAll('.shade[data-shade-index]').forEach(button=>{const i=Number(button.dataset.shadeIndex),inLook=recording&&selected.some(v=>v.id===x.id&&v.index===i);button.classList.remove('is-focused');button.classList.toggle('selected',inLook);if(!inLook)button.querySelector('.pan-check')?.remove();button.setAttribute('aria-pressed',String(inLook))});
+ panel.querySelectorAll('.shade-milestone-wrap').forEach((wrap,i)=>{const status=document.createElement('button');status.type='button';status.className='product-shade-status';status.title='Milestones';status.setAttribute('aria-label','Milestones for '+shades[i][0]);status.innerHTML='<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="m8 12 3 3 5-6"/></svg>';status.onclick=()=>openProductShadeStatus(x.id,i);wrap.append(status)});
  const host=document.getElementById('shade-milestone-popover');host.hidden=true;host.innerHTML='';
  if(!recording){const summary=document.querySelector('#detail-uses')?.parentElement;if(summary)summary.innerHTML='Product uses <strong id="detail-uses">'+(Number(x.uses)||0)+'</strong><span id="detail-plus"></span>'}
 }
