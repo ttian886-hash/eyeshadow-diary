@@ -3316,13 +3316,13 @@ function syncDetailTools(){
   const names=document.createElement('section');names.className='product-shade-directory';names.setAttribute('aria-label','Shade names');
   shades.forEach((sh,i)=>{const inLook=recording&&selected.some(v=>v.id===x.id&&v.index===i),button=document.createElement('button');button.type='button';button.className='product-shade-name'+(inLook?' selected':'');button.dataset.shadeIndex=i;button.dataset.productId=x.id;button.setAttribute('aria-label',sh[0]);button.setAttribute('aria-pressed',String(inLook));button.onclick=()=>toggleShade(x.id,i);button.innerHTML='<i style="background:'+escapeHtml(sh[1])+'" aria-hidden="true"></i><span>'+escapeHtml(sh[0])+'</span><b aria-hidden="true">'+''+'</b>';names.append(button)});document.querySelector('.detail-palette-with-tools').after(names);
  }
- panel.querySelectorAll('.shade[data-shade-index]').forEach(button=>{const i=Number(button.dataset.shadeIndex),inLook=recording&&selected.some(v=>v.id===x.id&&v.index===i);button.classList.remove('is-focused');button.classList.toggle('selected',inLook);button.querySelector('.pan-check')?.remove();const base=x.type==='single'?(Number(x.uses)||0):(Number(x.shadeUses?.[i])||0),preview=base+(inLook?1:0);button.querySelector('.shade-use-number').textContent=String(preview);button.setAttribute('aria-label',shades[i][0]+' · '+preview+' uses'+(inLook?' · includes this look':''));button.setAttribute('aria-pressed',String(inLook))});
+ panel.querySelectorAll('.shade[data-shade-index]').forEach(button=>{const i=Number(button.dataset.shadeIndex),inLook=recording&&selected.some(v=>v.id===x.id&&v.index===i);button.classList.remove('is-focused');button.classList.toggle('selected',inLook);button.querySelector('.pan-check')?.remove();const base=x.type==='single'?(Number(x.uses)||0):(Number(x.shadeUses?.[i])||0),preview=base;button.querySelector('.shade-use-number').textContent=String(preview);button.setAttribute('aria-label',shades[i][0]+' · '+preview+' uses');button.setAttribute('aria-pressed',String(inLook))});
  if(recording){
   panel.querySelectorAll('.shade[data-shade-index],.product-shade-name[data-shade-index]').forEach(button=>bindShadeMilestoneGesture(button,x.id,Number(button.dataset.shadeIndex)));
   const hint=document.createElement('p');hint.className='shade-gesture-hint';hint.id='shade-gesture-hint';hint.innerHTML='<span class=gesture-touch>Tap to select · Hold for Hit pan</span><span class=gesture-pointer>Click to select · Alt + Enter for Hit pan</span>';panel.querySelector('.detail-palette-with-tools').after(hint);
  }
 
- if(recording){const summary=document.querySelector('#detail-uses')?.parentElement;if(summary)summary.innerHTML='Product uses <strong id="detail-uses">'+((Number(x.uses)||0)+(selected.some(v=>v.id===x.id)?1:0))+'</strong><small class="usage-preview-note">Includes this look</small>';}
+ if(recording){const summary=document.querySelector('#detail-uses')?.parentElement;if(summary)summary.innerHTML='Product uses <strong id="detail-uses">'+(Number(x.uses)||0)+'</strong>';}
  const host=document.getElementById('shade-milestone-popover');host.hidden=true;host.innerHTML='';
  if(!recording){const summary=document.querySelector('#detail-uses')?.parentElement;if(summary)summary.innerHTML='Product uses <strong id="detail-uses">'+(Number(x.uses)||0)+'</strong><span id="detail-plus"></span>'}
 }
@@ -3847,7 +3847,7 @@ function toggleShade(id,index){
  if(x.archived){toast('Return this product to Collection before recording a look.');return}
  if(x.discardedShades?.[index]||(finishedDate(x,index)&&!recordingFinalUses.has(id+':'+index))){toast(x.discardedShades?.[index]?'This shade is discarded.':'This shade is finished.');return}
  const at=selected.findIndex(v=>v.id===id&&v.index===index);if(at>=0)selected.splice(at,1);else selected.push({id,index});
- detailFocus[id]=index;pruneRecordingMilestones();render();showShadeSelectionFeedback(id,index,at>=0?-1:1);
+ detailFocus[id]=index;pruneRecordingMilestones();render();
 }function toast(t){let d=document.createElement('div');d.className='toast';d.textContent=t;document.body.append(d);setTimeout(()=>d.remove(),1100)}let statsSaveBump=0;let statsChangeTimer=null;function showStatsChange(delta){if(statsChangeTimer)clearTimeout(statsChangeTimer);statsSaveBump=delta;if(delta)statsChangeTimer=setTimeout(()=>{statsSaveBump=0;const bump=document.querySelector('.total-save-bump');if(bump)bump.remove()},2400)}
 function animateCount(element,end,duration=750,delta=null){
  if(!element)return;
@@ -3869,7 +3869,7 @@ history.push({id:transactionId,selection:selected.map(v=>({...v})),date:validPan
 if(recording)lastSave.milestoneCommit=commitRecordingMilestones();recentlySavedIds=ids;recordStatChange(beforeStatTotals);if(recording){lookDraft=[];recordingDate='';recordingMilestoneDraft=[];recordingFinalUses.clear()}selected=[];recording=false;persist();storeRecordingDraft();}catch(error){data=rollback.data;history=rollback.history;lastSave=rollback.lastSave;recording=rollback.recording;recordingDate=rollback.recordingDate;recordingMilestoneDraft=rollback.milestones;recordingFinalUses.clear();rollback.finalUses.forEach(v=>recordingFinalUses.add(v));selected=rollback.selection;lookDraft=recording?selected:lookDraft;recentlySavedIds=[];pendingStatChange=null;storeRecordingDraft();render();toast('Could not save. Your draft is preserved.');return false}
 // Keep detail context; a save from the picker opens the completed journal entry.
 if(page==='pick'){journalBrowse.query='';journalBrowse.month='';journalBrowse.notice='';go('history')}else render();
-// Selection already previews the final counts; saving must not add a second animation.
+lastSave.selection.forEach(v=>showShadeSelectionFeedback(v.id,v.index,1));
 const savedProduct=lastSave.productCounts.find(v=>v.id===activeProduct),detailCount=document.getElementById('detail-uses'),detailPlus=document.getElementById('detail-plus');
 if(savedProduct&&detailCount)detailCount.textContent=String(Number(data.find(x=>x.id===activeProduct)?.uses)||0);
 showQuickUndo(transactionId);
@@ -3878,7 +3878,7 @@ return true;
 }
 function showShadeSelectionFeedback(id,index,delta){
  const button=[...document.querySelectorAll('.shade[data-shade-index]')].find(b=>b.dataset.productId===id&&Number(b.dataset.shadeIndex)===index);if(!button)return;
- const count=button.querySelector('.shade-use-number');if(!count)return;button.querySelectorAll('.shade-saved-plus').forEach(b=>b.remove());count.classList.remove('usage-number-pop');void count.offsetWidth;count.classList.add('usage-number-pop');const badge=document.createElement('span');badge.className='shade-saved-plus selection-delta';badge.textContent=delta>0?'+1':'−1';badge.setAttribute('aria-label',delta>0?'One use added to draft':'One use removed from draft');count.after(badge);setTimeout(()=>{badge.remove();count.classList.remove('usage-number-pop')},1100);
+ const count=button.querySelector('.shade-use-number');if(!count)return;button.querySelectorAll('.shade-saved-plus').forEach(b=>b.remove());count.classList.remove('usage-number-pop');void count.offsetWidth;count.classList.add('usage-number-pop');const badge=document.createElement('span');badge.className='shade-saved-plus selection-delta';badge.textContent=delta>0?'+1':'−1';badge.setAttribute('aria-label',delta>0?'One use saved':'One saved use undone');count.after(badge);setTimeout(()=>{badge.remove();count.classList.remove('usage-number-pop')},1100);
 }
 function showSavedShadeFeedback(selection){
  for(const v of selection){
@@ -3916,7 +3916,7 @@ function undoLastLook(skipConfirm=false){statsSaveBump=0;const beforeStatTotals=
   t.shadeCounts.forEach(v=>{data.find(x=>x.id===v.id).shadeUses[v.index]=v.uses});
   history.splice(historyIndex,1);lastSave=null;selected=[];persist();
  }catch(error){data=rollback.data;history=rollback.history;lastSave=rollback.lastSave;selected=rollback.selected;toast('Could not undo. Your saved look is unchanged.');return;}
- recentlySavedIds=[];dismissQuickUndo();recordStatChange(beforeStatTotals);render();toast('Last save undone');
+ recentlySavedIds=[];dismissQuickUndo();recordStatChange(beforeStatTotals);render();(t.selection||[]).forEach(v=>showShadeSelectionFeedback(v.id,v.index,-1));toast('Last save undone');
 }
 function undoLookButton(){return lastSave?'<div class="undo-look-wrap"><button type="button" class="undo-look-button" onclick="undoLastLook()" aria-label="Undo last saved look"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-2"/></svg><span>Undo Last Save</span></button></div>':''}
 function showUsageDelta(n){/* v113: no floating toast; deltas are beside statistics totals */}
