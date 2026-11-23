@@ -42,11 +42,14 @@ function syncPresentation(){
  return cloudPresentation({offline:typeof navigator!=='undefined'&&navigator.onLine===false,signedIn:!!user,busy:busy||flushing,auto,conflict,retry:connectionRetryPending,error:operationError,exists:cloudExists,checking:/Checking private cloud/.test(status),pending:auto&&raw!==baseline,matches:raw!==null&&raw===serverConfirmedRaw,waiting:/Waiting for cloud|Checking|Reloading/i.test(status),reason,time:lastTransfer?new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit'}).format(lastTransfer.time):null});
 }
 function syncSummary(){return syncPresentation().summary}
+function formatLastSyncTime(time,now=new Date()){
+ return new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',...(time.getFullYear()!==now.getFullYear()?{year:'numeric'}:{}),hour:'2-digit',minute:'2-digit'}).format(time);
+}
 function ui(){
  const put=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value},view=syncPresentation();
  put('cloud-status',view.message);document.getElementById('cloud-status')?.classList.toggle('cloud-attention',view.attention);put('cloud-compact-indicator',view.summary);
  put('cloud-account',user?.email||'Connect your devices with Google');
- put('cloud-last-transfer',lastTransfer?'Last confirmed sync · '+new Intl.DateTimeFormat('en-GB',{dateStyle:'medium',timeStyle:'short'}).format(lastTransfer.time):'No confirmed sync recorded on this device');
+ put('cloud-last-transfer',lastTransfer?'Last synced · '+formatLastSyncTime(lastTransfer.time):'No confirmed sync yet');
  const toggle=document.getElementById('cloud-auto-toggle');if(toggle){toggle.checked=auto;toggle.disabled=busy||flushing||!user||(!auto&&!cloudExists);}
  for(const [id,enabled] of [['cloud-retry',!!user&&connectionRetryPending],['cloud-login',!user],['cloud-logout',!!user],['cloud-upload',!!user&&!auto],['cloud-download',!!user&&cloudExists&&!auto]]){const el=document.getElementById(id);if(el){el.disabled=busy||flushing||!enabled;if(['cloud-retry','cloud-login','cloud-logout'].includes(id))el.hidden=!enabled;}}
  put('cloud-manual-note',auto?'Turn off automatic sync before a manual transfer. Manual transfers replace data; they do not merge it.':'Manual transfers replace one copy with the other. Export a backup before choosing which copy to keep.');
