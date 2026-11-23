@@ -1,5 +1,5 @@
 // v178: cache local app files for offline use; never return HTML as JavaScript.
-const CACHE='eyes-diary-pwa-v289';
+const CACHE='eyes-diary-pwa-v290';
 const FILES=['./','./index.html','./firebase-cloud.js','./product-lookup.js','./vendor/zxing-browser-0.2.1.min.js','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./icons/icon-180.png','./assets/powder-0.png','./assets/powder-1.png','./assets/powder-2.png','./assets/powder-3.png','./assets/kevyn-unblinking-24k.png'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('eyes-diary-pwa-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
