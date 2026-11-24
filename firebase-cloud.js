@@ -101,16 +101,19 @@ function checkCloudConnection(){
 }
 window.cloudRetryConnection=()=>{connectionRetryCount=0;return checkCloudConnection()};
 
-async function receive(s){if(!user||!auto)return;if(flushing){setTimeout(()=>{if(auto)receive(s).catch(e=>pause(e.message));},350);return;}if(s.metadata?.fromCache||s.metadata?.hasPendingWrites){status=`${user.email} · Waiting for cloud confirmation`;ui();return;}if(!s.exists()){pause('Cloud backup was removed');return;}const d=s.data(),rev=d.revision||null;if(rev===remoteRevision){const confirmed=encode(readSnapshot(d));if(confirmed===encode(snapshot()))markTransfer('Matched cloud',confirmed);status=`${user.email} · Auto sync up to date`;ui();return;}
+async function receive(s,epoch=connectionEpoch){if(!user||!auto||epoch!==connectionEpoch)return;if(flushing){setTimeout(()=>{if(auto&&epoch===connectionEpoch)receive(s,epoch).catch(e=>pause(e.message));},350);return;}if(s.metadata?.fromCache||s.metadata?.hasPendingWrites){status=`${user.email} · Waiting for cloud confirmation`;ui();return;}if(!s.exists()){pause('Cloud backup was removed');return;}const d=s.data(),rev=d.revision||null;
  const raw=encode(readSnapshot(d));const local=encode(snapshot());
+ if(rev===remoteRevision&&raw===baseline){if(raw===local)markTransfer('Matched cloud',raw);status=raw===local?`${user.email} · Auto sync up to date`:`${user.email} · Changes pending`;ui();return;}
  if(local!==baseline){pause('Both device and cloud have changes');return;}
  if(raw!==local){try{bridge().applySnapshot(JSON.parse(raw));setBaseline(rev,raw);markTransfer('Received from cloud',raw);status=`${user.email} · Updated from cloud · Reloading`;ui();location.reload();}catch(e){pause('Cloud restore failed: '+e.message);}return;}
  setBaseline(rev,raw);markTransfer('Matched cloud',raw);status=`${user.email} · Auto sync up to date`;ui();}
-function watch(){stopWatcher();listener=onSnapshot(ref(),s=>{receive(s).catch(e=>pause('Cloud update failed: '+e.message));},e=>pause('Cloud listener failed: '+e.message));}
-function schedule(){if(!auto||!user||busy||conflict)return;if(typeof navigator!=='undefined'&&navigator.onLine===false){ui();return;}ui();clearTimeout(flushTimer);flushTimer=setTimeout(()=>flush().catch(e=>pause(e.message)),900);}
+function watch(){stopWatcher();const epoch=connectionEpoch;listener=onSnapshot(ref(),s=>{receive(s,epoch).catch(e=>{if(epoch===connectionEpoch)pause('Cloud update failed: '+e.message)});},e=>{if(epoch===connectionEpoch)pause('Cloud listener failed: '+e.message)});}
+function schedule(){if(!auto||!user||busy||conflict)return;if(typeof navigator!=='undefined'&&navigator.onLine===false){ui();return;}ui();clearTimeout(flushTimer);const epoch=connectionEpoch;flushTimer=setTimeout(()=>flush().catch(e=>{if(epoch===connectionEpoch&&auto)pause(e.message)}),900);}
 async function flush(){if(!auto||flushing||!user||busy)return;if(typeof navigator!=='undefined'&&navigator.onLine===false){ui();return;}const local=encode(snapshot());if(local===baseline)return;flushing=true;try{
- const expected=cloudRevision;const rev=crypto.randomUUID();if(new Blob([local]).size>850000)throw Error('Backup exceeds Firestore document size');
- await runTransaction(db,async tx=>{const s=await tx.get(ref());if(!s.exists()||s.data().revision!==expected)throw Error('Cloud changed before this device uploaded');tx.set(ref(),{snapshotJson:local,revision:rev,updatedAt:new Date().toISOString(),schemaVersion:3,encoding:'json'});});
+ const expected=cloudRevision,expectedRaw=baseline,epoch=connectionEpoch,uid=user.uid,target=ref();const rev=crypto.randomUUID();if(new Blob([local]).size>850000)throw Error('Backup exceeds Firestore document size');
+ await runTransaction(db,async tx=>{if(epoch!==connectionEpoch||user?.uid!==uid||!auto)throw Error('Sync session changed');const s=await tx.get(target);if(epoch!==connectionEpoch||user?.uid!==uid||!auto)throw Error('Sync session changed');if(!s.exists()||s.data().revision!==expected||encode(readSnapshot(s.data()))!==expectedRaw)throw Error('Cloud changed before this device uploaded');tx.set(target,{snapshotJson:local,revision:rev,updatedAt:new Date().toISOString(),schemaVersion:3,encoding:'json'});});
+ // Ignore completion from a previous account or a stopped sync session.
+ if(epoch!==connectionEpoch||user?.uid!==uid||!auto)return;
  // A second edit made during the network request remains pending and will be uploaded separately.
  setBaseline(rev,local);markTransfer('Uploaded to cloud',local);status=`${user.email} · Auto sync saved`;ui();
  }finally{flushing=false;ui();if(auto&&encode(snapshot())!==baseline)schedule();}}
@@ -121,7 +124,7 @@ window.cloudAutoStart=async()=>{if(!user||busy||auto)return;busy=true;operationE
  if(!confirm(`Enable automatic two-way sync on this device?\n\n${summary(remote)}\n\nBoth copies match. Changes will upload automatically. If edits conflict, sync will pause instead of overwriting.`))return;
  conflict=false;auto=true;setBaseline(s.data().revision||null,raw);status=`${user.email} · Auto sync enabled`;watch();
  }catch(e){operationError='Automatic sync was not enabled. '+e.message}finally{busy=false;ui()}};
-window.cloudAutoStop=()=>{if(!auto)return;auto=false;stopWatcher();localStorage.removeItem(key());operationError=null;status=`${user.email} · Auto sync off · Manual backup available`;ui()};
+window.cloudAutoStop=()=>{if(!auto)return;connectionEpoch++;auto=false;stopWatcher();localStorage.removeItem(key());operationError=null;status=`${user.email} · Auto sync off · Manual backup available`;ui()};
 window.addEventListener('diary-local-change',()=>{if(auto)schedule()});
 window.cloudSignIn=async()=>{busy=true;operationError=null;ui();try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(e){operationError='Could not sign in. Please try again.'}finally{busy=false;ui()}};
 window.cloudSignOut=async()=>{window.cloudAutoStop();await signOut(auth)};

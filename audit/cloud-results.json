@@ -1,5 +1,5 @@
 {
-  "passed": 8,
+  "passed": 14,
   "failed": [],
   "scope": "Actual receive/flush functions with mocked Firestore; not a real two-device test."
 }

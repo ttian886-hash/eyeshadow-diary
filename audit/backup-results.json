@@ -1,5 +1,5 @@
 {
-  "passed": 10,
+  "passed": 14,
   "failed": [],
   "scope": "Actual importInventory function, isolated file/storage/download mocks; not physical-device file transfer."
 }
