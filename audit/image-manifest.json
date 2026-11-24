@@ -1,0 +1,42 @@
+[
+  {
+    "path": "assets/powder-0-1280.webp",
+    "bytes": 261950,
+    "sha256": "c417fface96f5a8dccd968b6365481c43b52dc29db2af8fe598cfac0269f3977"
+  },
+  {
+    "path": "assets/powder-0-640.webp",
+    "bytes": 58394,
+    "sha256": "7a69f4c5758df574c2f63d80e0e6c034662de11787729828928ddef834bdefcd"
+  },
+  {
+    "path": "assets/powder-1-1280.webp",
+    "bytes": 247786,
+    "sha256": "864e7adaefce13a6d66aed3dc6f4d1a4b9bbcb0df7e6bdc06c735d371dd66769"
+  },
+  {
+    "path": "assets/powder-1-640.webp",
+    "bytes": 54550,
+    "sha256": "4abbd92d4190005352be5c826b922509a8579b5369aa228780b492aaa6880cfe"
+  },
+  {
+    "path": "assets/powder-2-1280.webp",
+    "bytes": 267292,
+    "sha256": "b0d806e98eb16788a057f662d4e2a434ef405c6c9097e751808c90c2b73b7d8f"
+  },
+  {
+    "path": "assets/powder-2-640.webp",
+    "bytes": 58762,
+    "sha256": "ac728bbf2e1f19f19219ff7e7fabc958c7c14dd38c4db9425c221212577da60a"
+  },
+  {
+    "path": "assets/powder-3-1280.webp",
+    "bytes": 249454,
+    "sha256": "f3019143105144a965ccf0da6655a60618510a4d4a5884f253a3a71fe850ac92"
+  },
+  {
+    "path": "assets/powder-3-640.webp",
+    "bytes": 55196,
+    "sha256": "46915e53c0461c66088c40a4da5ba4a7926b36a7253e12b2123027a3094846fb"
+  }
+]
