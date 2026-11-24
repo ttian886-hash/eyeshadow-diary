@@ -4,7 +4,7 @@ function ctx(){const c=vm.createContext({assert,console,Symbol,JSON,Date,Event:c
 let data=[{id:'old',brand:'Demo',name:'Old',type:'single',color:'#888888',uses:4}],history=[],lastSave={id:'recent'},selected=[{id:'old',index:0}],messages=[],downloads=[],events=[],allow=true,failStorage=false,failView=false;
 const saved=JSON.stringify({data,history,lastSave}),storage={eyes_official_v1:saved},window={dispatchEvent:e=>events.push(e.type)},localStorage={getItem:k=>storage[k]??null,setItem:(k,v)=>{if(failStorage&&k==='eyes_official_v1')throw Error('Quota exceeded');storage[k]=v}},backupFeedback=(m,e)=>messages.push({m,e}),confirm=()=>allow,toast=m=>messages.push({m}),go=()=>{if(failView)throw Error('Render failed')},downloadBackupPayload=(v,n)=>downloads.push({v,n}),applyLookLinkCorrection=()=>{};
 const incoming={data:[{id:'new',brand:'Demo',name:'New',type:'palette',shades:[['Purple','#775588'],['Blue','#335577']],shadeUses:[4,6],uses:7}],history:[{id:'imported',date:'24/11/2026',selection:[{id:'new',index:1}]}]},file={size:200,text:async()=>JSON.stringify(incoming)};
-${['shadeCount','validateBackup','backupSummary','importInventory'].map(extract).join('\n')}
+${['shadeCount','validPanDate','validateBackup','backupSummary','importInventory'].map(extract).join('\n')}
 `,c);return c}
 const cases=[
  ['Import keeps prior copy, exact counts and dated entries',`await importInventory(file);assert.equal(data[0].id,'new');assert.equal(data[0].uses,7);assert.equal(JSON.stringify(data[0].shadeUses),'[4,6]');assert.equal(history[0].date,'24/11/2026');assert.equal(storage.eyes_diary_pre_import_backup,saved);assert.equal(downloads.length,1);assert.equal(downloads[0].v.data[0].id,'old');assert.equal(lastSave,null);assert.equal(selected.length,0);`],
