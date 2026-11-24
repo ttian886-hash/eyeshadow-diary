@@ -1,0 +1,5 @@
+{
+  "passed": 21,
+  "failed": [],
+  "scope": "Actual app functions with isolated fixture data. Cloud presentation reducer only; no live multi-device verification."
+}
