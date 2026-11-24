@@ -1,0 +1,6 @@
+{
+  "passed": 759,
+  "failed": [],
+  "baseline": "626ed3c",
+  "scope": "Independent square/wide 44/48/56/64 geometry and optical area; unchanged functional controls, strip geometry and arithmetic; strip positioning may change. Browser centers validated separately."
+}
