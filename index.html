@@ -4951,7 +4951,7 @@ selected.forEach(v=>{let x=data.find(y=>y.id===v.id);if(x&&x.type==='palette'&&A
 history.push({id:transactionId,selection:selected.map(v=>({...v})),date:validPanDate(lookDate)?new Date(lookDate+'T12:00:00').toLocaleDateString('en-GB'):new Date().toLocaleDateString('en-GB'),items:selected.map(v=>{let x=data.find(y=>y.id===v.id);return x.name+(x.type==='palette'?` ${x.shades[v.index][0]}`:'')})});
 if(recording)lastSave.milestoneCommit=commitRecordingMilestones();recentlySavedIds=ids;recordStatChange(beforeStatTotals);if(recording){lookDraft=[];recordingDate='';recordingMilestoneDraft=[];recordingFinalUses.clear()}selected=[];recording=false;persist();storeRecordingDraft();}catch(error){data=rollback.data;history=rollback.history;lastSave=rollback.lastSave;recording=rollback.recording;recordingDate=rollback.recordingDate;recordingMilestoneDraft=rollback.milestones;recordingFinalUses.clear();rollback.finalUses.forEach(v=>recordingFinalUses.add(v));selected=rollback.selection;lookDraft=recording?selected:lookDraft;recentlySavedIds=[];pendingStatChange=null;storeRecordingDraft();render();if(!document.getElementById('recording-review-overlay'))toast('Could not save. Your draft is still open.');return false}
 // Keep the saved counts visible; History is an explicit action.
-if(page==='pick')page='collection';render();window.scrollTo?.(0,savedScrollY);
+if(page==='pick'){page='collection';keepSavedCollectionVisible(ids,savedScrollY)}else{render();window.scrollTo?.(0,savedScrollY);}
 lastSave.selection.forEach(v=>showShadeSelectionFeedback(v.id,v.index,1));
 const savedProduct=lastSave.productCounts.find(v=>v.id===activeProduct),detailCount=document.getElementById('detail-uses'),detailPlus=document.getElementById('detail-plus');
 if(savedProduct&&detailCount)detailCount.textContent=String(Number(data.find(x=>x.id===activeProduct)?.uses)||0);
@@ -4959,6 +4959,11 @@ showProductUsageFeedback(lastSave.selection,1);
 showQuickUndo(transactionId);
 setTimeout(()=>{statsSaveBump=0;const bump=document.querySelector('.total-save-bump');if(bump)bump.remove()},2400);
 return true;
+}
+function keepSavedCollectionVisible(ids,scrollY){
+ const items=activeCollectionItems();ids.forEach(id=>{const index=items.findIndex(x=>x.id===id);if(index>=0)collectionVisibleCount=Math.max(collectionVisibleCount,index+1)});render();window.scrollTo?.(0,scrollY);
+ const rows=[...(document.querySelectorAll?.('[data-browse-product-id]')||[])].filter(row=>ids.includes(row.dataset.browseProductId));
+ if(rows.length&&!rows.some(row=>{const r=row.getBoundingClientRect();return r.top>=0&&r.bottom<=window.innerHeight-(document.getElementById('nav')?.offsetHeight||78)-80}))rows[0].scrollIntoView({block:'nearest'});
 }
 function showProductUsageFeedback(selection,delta){
  if(selection.some(v=>v.id===activeProduct)){const count=document.getElementById('detail-uses');if(count)animateUsageFeedback(count,delta,'product-usage-delta');}
