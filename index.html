@@ -4963,7 +4963,7 @@ return true;
 function keepSavedCollectionVisible(ids,scrollY){
  const items=activeCollectionItems();ids.forEach(id=>{const index=items.findIndex(x=>x.id===id);if(index>=0)collectionVisibleCount=Math.max(collectionVisibleCount,index+1)});render();window.scrollTo?.(0,scrollY);
  const rows=[...(document.querySelectorAll?.('[data-browse-product-id]')||[])].filter(row=>ids.includes(row.dataset.browseProductId));
- if(rows.length&&!rows.some(row=>{const r=row.getBoundingClientRect();return r.top>=0&&r.bottom<=window.innerHeight-(document.getElementById('nav')?.offsetHeight||78)-80}))rows[0].scrollIntoView({block:'nearest'});
+ if(rows.length&&!rows.some(row=>{const r=row.getBoundingClientRect();return r.top>=0&&r.bottom<=window.innerHeight-(document.getElementById('nav')?.offsetHeight||78)-80}))rows[0].scrollIntoView({block:'center'});
 }
 function showProductUsageFeedback(selection,delta){
  if(selection.some(v=>v.id===activeProduct)){const count=document.getElementById('detail-uses');if(count)animateUsageFeedback(count,delta,'product-usage-delta');}
@@ -5017,7 +5017,7 @@ function undoLastLook(skipConfirm=false){statsSaveBump=0;const beforeStatTotals=
   t.shadeCounts.forEach(v=>{data.find(x=>x.id===v.id).shadeUses[v.index]=v.uses});
   history.splice(historyIndex,1);lastSave=null;selected=[];persist();
  }catch(error){data=rollback.data;history=rollback.history;lastSave=rollback.lastSave;selected=rollback.selected;toast('Could not undo. Your saved look is unchanged.');return;}
- savedHistoryFocusId=null;recentlySavedIds=[];dismissQuickUndo();recordStatChange(beforeStatTotals);render();(t.selection||[]).forEach(v=>showShadeSelectionFeedback(v.id,v.index,-1));showProductUsageFeedback(t.selection||[],-1);toast('Last save undone');
+ savedHistoryFocusId=null;recentlySavedIds=[];dismissQuickUndo();recordStatChange(beforeStatTotals);if(page==='collection')keepSavedCollectionVisible(t.productCounts.map(v=>v.id),window.scrollY||0);else render();(t.selection||[]).forEach(v=>showShadeSelectionFeedback(v.id,v.index,-1));showProductUsageFeedback(t.selection||[],-1);toast('Last save undone');
 }
 function undoLookButton(){return lastSave?'<div class="undo-look-wrap"><button type="button" class="undo-look-button" onclick="undoLastLook()" aria-label="Undo last saved look"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-2"/></svg><span>Undo last save</span></button></div>':''}
 function showUsageDelta(n){/* v113: no floating toast; deltas are beside statistics totals */}
