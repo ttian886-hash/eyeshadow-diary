@@ -1,6 +1,6 @@
 // v178: cache local app files for offline use; never return HTML as JavaScript.
-const CACHE='eyes-diary-pwa-v318';
-const FILES=['./','./index.html','./firebase-cloud.js','./product-lookup.js','./vendor/zxing-browser-0.2.1.min.js','./manifest.webmanifest','./icons/icon-v318-192.png','./icons/icon-v318-512.png','./icons/icon-v318-180.png','./assets/powder-0.png','./assets/powder-1.png','./assets/powder-2.png','./assets/powder-3.png','./assets/kevyn-unblinking-24k.png','./assets/powder-0-640.webp','./assets/powder-0-1280.webp','./assets/powder-1-640.webp','./assets/powder-1-1280.webp','./assets/powder-2-640.webp','./assets/powder-2-1280.webp','./assets/powder-3-640.webp','./assets/powder-3-1280.webp'];
+const CACHE='eyes-diary-pwa-v319';
+const FILES=['./','./index.html','./firebase-cloud.js','./product-lookup.js','./vendor/zxing-browser-0.2.1.min.js','./manifest.webmanifest','./icons/icon-v319-192.png','./icons/icon-v319-512.png','./icons/icon-v319-180.png','./assets/powder-0.png','./assets/powder-1.png','./assets/powder-2.png','./assets/powder-3.png','./assets/kevyn-unblinking-24k.png','./assets/powder-0-640.webp','./assets/powder-0-1280.webp','./assets/powder-1-640.webp','./assets/powder-1-1280.webp','./assets/powder-2-640.webp','./assets/powder-2-1280.webp','./assets/powder-3-640.webp','./assets/powder-3-1280.webp'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('eyes-diary-pwa-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
 self.addEventListener('fetch',event=>{
